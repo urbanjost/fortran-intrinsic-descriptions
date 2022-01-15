@@ -604,6 +604,10 @@ if [ -d $HOME/github/FORK/fortran-lang.org/learn/intrinsics/ ]
 then
    cp intrinsics/*.md $HOME/github/FORK/fortran-lang.org/learn/intrinsics/
 fi
+(
+cd /usr/share &&
+tar xvfz $BASE/docs/fortran.tgz
+)
 ###############################################################################
 ) |tee /tmp/all.log
 ###############################################################################

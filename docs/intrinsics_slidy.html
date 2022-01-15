@@ -8993,19 +8993,23 @@ dim=3 :( 2 3 )
 <h2 id="name-156"><strong>Name</strong></h2>
 <p><strong>radix</strong>(3) - [NUMERIC MODEL] Base of a model number</p>
 <h2 id="syntax-156"><strong>Syntax</strong></h2>
-<div class="sourceCode" id="cb438"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb438-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">radix</span>(x)</a></code></pre></div>
-<h2 id="description-153"><strong>Description</strong></h2>
-<p><strong>radix(x)</strong> returns the base of the model representing the entity <strong>x</strong>.</p>
+<div class="sourceCode" id="cb438"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb438-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">radix</span>(x)</a>
+<a class="sourceLine" id="cb438-2" title="2"></a>
+<a class="sourceLine" id="cb438-3" title="3">   <span class="kw">function</span> <span class="fu">radix</span>(x) <span class="kw">result</span>(r)</a>
+<a class="sourceLine" id="cb438-4" title="4">   <span class="dt">TYPE(kind=KIND)</span>,<span class="dt">intent(in)</span> <span class="dt">::</span> x</a>
+<a class="sourceLine" id="cb438-5" title="5">   <span class="dt">integer</span> <span class="dt">::</span> r</a></code></pre></div>
+<p>where TYPE is <em>integer</em> or <em>real</em> and KIND is any kind supported by the type. ## <strong>Description</strong></p>
+<p><strong>radix(x)</strong> returns the base of the model representing the entity <strong>x</strong>. This helps to allow for a generic model to be modeled in general, but on a binary computer will just always return 2.</p>
 <h2 id="arguments-150"><strong>Arguments</strong></h2>
 <ul>
 <li><dl>
 <dt><strong>x</strong></dt>
-<dd>Shall be of type <em>integer</em> or <em>real</em>
+<dd>The type of this value is used to determine which type model to query
 </dd>
 </dl></li>
 </ul>
 <h2 id="returns-134"><strong>Returns</strong></h2>
-<p>The return value is a scalar of type <em>integer</em> and of the default integer kind.</p>
+<p>the base of the model for values the same type as <strong>x</strong></p>
 <h2 id="examples-135"><strong>Examples</strong></h2>
 <p>Sample program:</p>
 <div class="sourceCode" id="cb439"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb439-1" title="1"><span class="kw">program</span> demo_radix</a>
@@ -9022,7 +9026,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-125"><strong>See Also</strong></h2>
 <p><a href="DIGITS"><strong>digits</strong>(3)</a>, <a href="EPSILON"><strong>epsilon</strong>(3)</a>, <a href="EXPONENT"><strong>exponent</strong>(3)</a>, <a href="FRACTION"><strong>fraction</strong>(3)</a>, <a href="HUGE"><strong>huge</strong>(3)</a>, <a href="MAXEXPONENT"><strong>maxexponent</strong>(3)</a>, <a href="MINEXPONENT"><strong>minexponent</strong>(3)</a>, <a href="NEAREST"><strong>nearest</strong>(3)</a>, <a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RANGE"><strong>range</strong>(3)</a>, <a href="RRSPACING"><strong>rrspacing</strong>(3)</a>, <a href="SCALE"><strong>scale</strong>(3)</a>, <a href="SET_EXPONENT"><strong>set_exponent</strong>(3)</a>, <a href="SPACING"><strong>spacing</strong>(3)</a>, <a href="TINY"><strong>tiny</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-114">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-licensemit-urbanjost">fortran-lang intrinsic descriptions (license:MIT) <span class="citation">@urbanjost</span></h6>
 </div>
 <div id="random_number" class="slide section level1">
 <h1>RANDOM_NUMBER</h1>
@@ -9030,7 +9034,7 @@ dim=3 :( 2 3 )
 <p><strong>random_number</strong>(3) - [MATHEMATICS:RANDOM] Pseudo-random number</p>
 <h2 id="syntax-157"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb441"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb441-1" title="1">   <span class="fu">random_number</span>(harvest)</a></code></pre></div>
-<h2 id="description-154"><strong>Description</strong></h2>
+<h2 id="description-153"><strong>Description</strong></h2>
 <p>Returns a single pseudorandom number or an array of pseudorandom numbers from the uniform distribution over the range 0 &lt;= x &lt; 1.</p>
 <h2 id="arguments-151"><strong>Arguments</strong></h2>
 <ul>
@@ -9097,7 +9101,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-126"><strong>See Also</strong></h2>
 <p><a href="RANDOM_SEED"><strong>random_seed</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-115">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-114">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="random_seed" class="slide section level1">
 <h1>RANDOM_SEED</h1>
@@ -9105,7 +9109,7 @@ dim=3 :( 2 3 )
 <p><strong>random_seed</strong>(3) - [MATHEMATICS:RANDOM] Initialize a pseudo-random number sequence</p>
 <h2 id="syntax-158"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb444"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb444-1" title="1"><span class="kw">call</span> <span class="fu">random_seed</span>(<span class="fu">size</span>, put, get)</a></code></pre></div>
-<h2 id="description-155"><strong>Description</strong></h2>
+<h2 id="description-154"><strong>Description</strong></h2>
 <p>Restarts or queries the state of the pseudorandom number generator used by random_number.</p>
 <p>If random_seed is called without arguments, it is seeded with random data retrieved from the operating system.</p>
 <h2 id="arguments-152"><strong>Arguments</strong></h2>
@@ -9146,7 +9150,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-127"><strong>See Also</strong></h2>
 <p><a href="RANDOM_NUMBER"><strong>random_number</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-116">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-115">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="range" class="slide section level1">
 <h1>RANGE</h1>
@@ -9187,7 +9191,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-128"><strong>See Also</strong></h2>
 <p><a href="DIGITS"><strong>digits</strong>(3)</a>, <a href="EPSILON"><strong>epsilon</strong>(3)</a>, <a href="EXPONENT"><strong>exponent</strong>(3)</a>, <a href="FRACTION"><strong>fraction</strong>(3)</a>, <a href="HUGE"><strong>huge</strong>(3)</a>, <a href="MAXEXPONENT"><strong>maxexponent</strong>(3)</a>, <a href="MINEXPONENT"><strong>minexponent</strong>(3)</a>, <a href="NEAREST"><strong>nearest</strong>(3)</a>, <a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RADIX"><strong>radix</strong>(3)</a>, <a href="RRSPACING"><strong>rrspacing</strong>(3)</a>, <a href="SCALE"><strong>scale</strong>(3)</a>, <a href="SET_EXPONENT"><strong>set_exponent</strong>(3)</a>, <a href="SPACING"><strong>spacing</strong>(3)</a>, <a href="TINY"><strong>tiny</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-117">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-116">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="rank" class="slide section level1">
 <h1>RANK</h1>
@@ -9195,7 +9199,7 @@ dim=3 :( 2 3 )
 <p><strong>rank</strong>(3) - [ARRAY INQUIRY] Rank of a data object</p>
 <h2 id="syntax-160"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb450"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb450-1" title="1"><span class="kw">result</span> <span class="kw">=</span> rank(a)</a></code></pre></div>
-<h2 id="description-156"><strong>Description</strong></h2>
+<h2 id="description-155"><strong>Description</strong></h2>
 <p><strong>rank(a)</strong> returns the rank of a scalar or array data object.</p>
 <h2 id="arguments-154"><strong>Arguments</strong></h2>
 <ul>
@@ -9220,7 +9224,7 @@ dim=3 :( 2 3 )
 <pre class="text"><code>   0           2           3</code></pre>
 <h2 id="standard-156"><strong>Standard</strong></h2>
 <p>TS 29113</p>
-<h6 id="fortran-lang-intrinsic-descriptions-118">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-117">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="real" class="slide section level1">
 <h1>REAL</h1>
@@ -9228,7 +9232,7 @@ dim=3 :( 2 3 )
 <p><strong>real</strong>(3) - [TYPE:NUMERIC] Convert to real type</p>
 <h2 id="syntax-161"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb453"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb453-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="bu">real</span>(x, <span class="fu">kind</span>)</a></code></pre></div>
-<h2 id="description-157"><strong>Description</strong></h2>
+<h2 id="description-156"><strong>Description</strong></h2>
 <p><strong>real(x, kind)</strong> converts its argument <strong>x</strong> to a real type.</p>
 <h2 id="arguments-155"><strong>Arguments</strong></h2>
 <ul>
@@ -9272,7 +9276,7 @@ dim=3 :( 2 3 )
 <p>FORTRAN 77 and later</p>
 <h2 id="see-also-129"><strong>See Also</strong></h2>
 <p><a href="DBLE"><strong>dble</strong>(3)</a>, <a href="FLOAT"><strong>float</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-119">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-118">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="repeat" class="slide section level1">
 <h1>REPEAT</h1>
@@ -9284,7 +9288,7 @@ dim=3 :( 2 3 )
 <a class="sourceLine" id="cb456-3" title="3">   <span class="dt">character(len=len(string)*ncopies)</span> <span class="dt">::</span> <span class="fu">repeat</span></a>
 <a class="sourceLine" id="cb456-4" title="4">   <span class="dt">character(len=*)</span>,<span class="dt">intent(in)</span>        <span class="dt">::</span> string</a>
 <a class="sourceLine" id="cb456-5" title="5">   <span class="dt">integer</span>,<span class="dt">intent(in)</span>                 <span class="dt">::</span> ncopies</a></code></pre></div>
-<h2 id="description-158"><strong>Description</strong></h2>
+<h2 id="description-157"><strong>Description</strong></h2>
 <p>Concatenates <strong>ncopies</strong> copies of a string.</p>
 <h2 id="arguments-156"><strong>Arguments</strong></h2>
 <ul>
@@ -9327,7 +9331,7 @@ dim=3 :( 2 3 )
 <li><p><strong>Elemental:</strong> <a href="ADJUSTL"><strong>adjustl</strong>(3)</a>, <a href="ADJUSTR"><strong>adjustr</strong>(3)</a>, <a href="INDEX"><strong>index</strong>(3)</a>, <a href="SCAN"><strong>scan</strong>(3)</a>, <a href="VERIFY"><strong>verify</strong>(3)</a></p></li>
 <li><p><strong>Non-elemental:</strong> <a href="LEN_TRIM"><strong>len_trim</strong>(3)</a>, <a href="LEN"><strong>len</strong>(3)</a>, <a href="REPEAT"><strong>repeat</strong>(3)</a>, <a href="TRIM"><strong>trim</strong>(3)</a></p></li>
 </ul>
-<h6 id="fortran-lang-intrinsic-descriptions-120">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-119">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="reshape" class="slide section level1">
 <h1>RESHAPE</h1>
@@ -9335,7 +9339,7 @@ dim=3 :( 2 3 )
 <p><strong>reshape</strong>(3) - [ARRAY RESHAPE] Function to reshape an array</p>
 <h2 id="syntax-163"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb459"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb459-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">reshape</span>(source, <span class="fu">shape</span>, pad, order)</a></code></pre></div>
-<h2 id="description-159"><strong>Description</strong></h2>
+<h2 id="description-158"><strong>Description</strong></h2>
 <p>Reshapes array <strong>source</strong> to correspond to <strong>shape</strong>. If necessary, the new array may be padded with elements from <strong>pad</strong> or permuted as defined by <strong>order</strong>.</p>
 <h2 id="arguments-157"><strong>Arguments</strong></h2>
 <ul>
@@ -9387,7 +9391,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-131"><strong>See Also</strong></h2>
 <p><a href="SHAPE"><strong>shape</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-121">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-120">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="rrspacing" class="slide section level1">
 <h1>RRSPACING</h1>
@@ -9395,7 +9399,7 @@ dim=3 :( 2 3 )
 <p><strong>rrspacing</strong>(3) - [MODEL_COMPONENTS] Reciprocal of the relative spacing</p>
 <h2 id="syntax-164"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb462"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb462-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="bu">rrspacing</span>(x)</a></code></pre></div>
-<h2 id="description-160"><strong>Description</strong></h2>
+<h2 id="description-159"><strong>Description</strong></h2>
 <p><strong>rrspacing(x)</strong> returns the reciprocal of the relative spacing of model numbers near <strong>x</strong>.</p>
 <h2 id="arguments-158"><strong>Arguments</strong></h2>
 <ul>
@@ -9411,7 +9415,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-132"><strong>See Also</strong></h2>
 <p><a href="DIGITS"><strong>digits</strong>(3)</a>, <a href="EPSILON"><strong>epsilon</strong>(3)</a>, <a href="EXPONENT"><strong>exponent</strong>(3)</a>, <a href="FRACTION"><strong>fraction</strong>(3)</a>, <a href="HUGE"><strong>huge</strong>(3)</a>, <a href="MAXEXPONENT"><strong>maxexponent</strong>(3)</a>, <a href="MINEXPONENT"><strong>minexponent</strong>(3)</a>, <a href="NEAREST"><strong>nearest</strong>(3)</a>, <a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RADIX"><strong>radix</strong>(3)</a>, <a href="RANGE"><strong>range</strong>(3)</a>, <a href="SCALE"><strong>scale</strong>(3)</a>, <a href="SET_EXPONENT"><strong>set_exponent</strong>(3)</a>, <a href="SPACING"><strong>spacing</strong>(3)</a>, <a href="TINY"><strong>tiny</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-122">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-121">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="same_type_as" class="slide section level1">
 <h1>SAME_TYPE_AS</h1>
@@ -9419,7 +9423,7 @@ dim=3 :( 2 3 )
 <p><strong>same_type_as</strong>(3) - [STATE] Query dynamic types for equality</p>
 <h2 id="syntax-165"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb463"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb463-1" title="1"><span class="kw">result</span> <span class="kw">=</span> same_type_as(a, b)</a></code></pre></div>
-<h2 id="description-161"><strong>Description</strong></h2>
+<h2 id="description-160"><strong>Description</strong></h2>
 <p>Query dynamic types for equality.</p>
 <h2 id="arguments-159"><strong>Arguments</strong></h2>
 <ul>
@@ -9440,7 +9444,7 @@ dim=3 :( 2 3 )
 <p>Fortran 2003 and later</p>
 <h2 id="see-also-133"><strong>See Also</strong></h2>
 <p><a href="EXTENDS_TYPE_OF"><strong>extends_type_of</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-123">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-122">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="scale" class="slide section level1">
 <h1>SCALE</h1>
@@ -9451,7 +9455,7 @@ dim=3 :( 2 3 )
 <a class="sourceLine" id="cb464-2" title="2"></a>
 <a class="sourceLine" id="cb464-3" title="3"><span class="dt">   real(kind=KIND)</span>,<span class="dt">intent(in)</span> <span class="dt">::</span> x</a>
 <a class="sourceLine" id="cb464-4" title="4">   <span class="dt">integer</span>,<span class="dt">intent(in)</span>         <span class="dt">::</span> i</a></code></pre></div>
-<h2 id="description-162"><strong>Description</strong></h2>
+<h2 id="description-161"><strong>Description</strong></h2>
 <p><strong>scale(x,i)</strong> returns x * <strong>radix(x)**i</strong>.</p>
 <h2 id="arguments-160"><strong>Arguments</strong></h2>
 <ul>
@@ -9482,7 +9486,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-134"><strong>See Also</strong></h2>
 <p><a href="DIGITS"><strong>digits</strong>(3)</a>, <a href="EPSILON"><strong>epsilon</strong>(3)</a>, <a href="EXPONENT"><strong>exponent</strong>(3)</a>, <a href="FRACTION"><strong>fraction</strong>(3)</a>, <a href="HUGE"><strong>huge</strong>(3)</a>, <a href="MAXEXPONENT"><strong>maxexponent</strong>(3)</a>, <a href="MINEXPONENT"><strong>minexponent</strong>(3)</a>, <a href="NEAREST"><strong>nearest</strong>(3)</a>, <a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RADIX"><strong>radix</strong>(3)</a>, <a href="RANGE"><strong>range</strong>(3)</a>, <a href="RRSPACING"><strong>rrspacing</strong>(3)</a>, <a href="SET_EXPONENT"><strong>set_exponent</strong>(3)</a>, <a href="SPACING"><strong>spacing</strong>(3)</a>, <a href="TINY"><strong>tiny</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-124">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-123">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="scan" class="slide section level1">
 <h1>SCAN</h1>
@@ -9490,7 +9494,7 @@ dim=3 :( 2 3 )
 <p><strong>scan</strong>(3) - [CHARACTER:SEARCH] Scan a string for the presence of a set of characters</p>
 <h2 id="syntax-167"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb467"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb467-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="bu">scan</span>(string, set<span class="kw">[</span>, back <span class="kw">[</span>, <span class="fu">kind</span><span class="kw">]]</span>)</a></code></pre></div>
-<h2 id="description-163"><strong>Description</strong></h2>
+<h2 id="description-162"><strong>Description</strong></h2>
 <p>Scans a <strong>string</strong> for any of the characters in a <strong>set</strong> of characters.</p>
 <p>If <strong>back</strong> is either absent or equals <strong>.false.</strong>, this function returns the position of the leftmost character of <strong>STRING</strong> that is in <strong>set</strong>. If <strong>back</strong> equals <strong>.true.</strong>, the rightmost position is returned. If no character of <strong>set</strong> is found in <strong>string</strong>, the result is zero.</p>
 <h2 id="arguments-161"><strong>Arguments</strong></h2>
@@ -9538,7 +9542,7 @@ dim=3 :( 2 3 )
 <li><p><strong>Elemental:</strong> <a href="ADJUSTL"><strong>adjustl</strong>(3)</a>, <a href="ADJUSTR"><strong>adjustr</strong>(3)</a>, <a href="INDEX"><strong>index</strong>(3)</a>, <a href="SCAN"><strong>scan</strong>(3)</a>, <a href="VERIFY"><strong>verify</strong>(3)</a></p></li>
 <li><p><strong>Nonelemental:</strong> <a href="LEN_TRIM"><strong>len_trim</strong>(3)</a>, <a href="LEN"><strong>len</strong>(3)</a>, <a href="REPEAT"><strong>repeat</strong>(3)</a>, <a href="TRIM"><strong>trim</strong>(3)</a></p></li>
 </ul>
-<h6 id="fortran-lang-intrinsic-descriptions-125">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-124">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="selected_char_kind" class="slide section level1">
 <h1>SELECTED_CHAR_KIND</h1>
@@ -9546,7 +9550,7 @@ dim=3 :( 2 3 )
 <p><strong>selected_char_kind</strong>(3) - [KIND] Choose character kind such as “Unicode”</p>
 <h2 id="syntax-168"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb470"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb470-1" title="1"><span class="kw">result</span> <span class="kw">=</span> selected_char_kind(name)</a></code></pre></div>
-<h2 id="description-164"><strong>Description</strong></h2>
+<h2 id="description-163"><strong>Description</strong></h2>
 <p><strong>selected_char_kind(name)</strong> returns the kind value for the character set named NAME, if a character set with such a name is supported, or <strong>-1</strong> otherwise. Currently, supported character sets include “ASCII” and “DEFAULT” (iwhich are equivalent), and “ISO_10646” (Universal Character Set, UCS-4) which is commonly known as “Unicode”.</p>
 <h2 id="arguments-162"><strong>Arguments</strong></h2>
 <ul>
@@ -9582,7 +9586,7 @@ dim=3 :( 2 3 )
     Hello World and Ni Hao -- 你好</code></pre>
 <h2 id="standard-164"><strong>Standard</strong></h2>
 <p>Fortran 2003 and later</p>
-<h6 id="fortran-lang-intrinsic-descriptions-126">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-125">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="selected_int_kind" class="slide section level1">
 <h1>SELECTED_INT_KIND</h1>
@@ -9590,7 +9594,7 @@ dim=3 :( 2 3 )
 <p><strong>selected_int_kind</strong>(3) - [KIND] Choose integer kind</p>
 <h2 id="syntax-169"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb473"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb473-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">selected_int_kind</span>(r)</a></code></pre></div>
-<h2 id="description-165"><strong>Description</strong></h2>
+<h2 id="description-164"><strong>Description</strong></h2>
 <p><strong>selected_int_kind(r)</strong> return the kind value of the smallest integer type that can represent all values ranging from <strong>-10**r</strong> (exclusive) to <strong>10**r</strong> (exclusive). If there is no integer kind that accommodates this range, selected_int_kind returns <strong>-1</strong>.</p>
 <h2 id="arguments-163"><strong>Arguments</strong></h2>
 <ul>
@@ -9623,7 +9627,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-136"><strong>See Also</strong></h2>
 <p><a href="AINT"><strong>aint</strong>(3)</a>, <a href="ANINT"><strong>anint</strong>(3)</a>, <a href="INT"><strong>int</strong>(3)</a>, <a href="NINT"><strong>nint</strong>(3)</a>, <a href="CEILING"><strong>ceiling</strong>(3)</a>, <a href="FLOOR"><strong>floor</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-127">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-126">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="selected_real_kind" class="slide section level1">
 <h1>SELECTED_REAL_KIND</h1>
@@ -9631,7 +9635,7 @@ dim=3 :( 2 3 )
 <p><strong>selected_real_kind</strong>(3) - [KIND] Choose real kind</p>
 <h2 id="syntax-170"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb476"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb476-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">selected_real_kind</span>(p, r, <span class="fu">radix</span>)</a></code></pre></div>
-<h2 id="description-166"><strong>Description</strong></h2>
+<h2 id="description-165"><strong>Description</strong></h2>
 <p><strong>selected_real_kind(p, r, radix)</strong> return the kind value of a real data type with decimal precision of at least <strong>p</strong> digits, exponent range of at least <strong>r</strong>, and with a radix of <strong>radix</strong>.</p>
 <h2 id="arguments-164"><strong>Arguments</strong></h2>
 <ul>
@@ -9686,7 +9690,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later; with RADIX - Fortran 2008 and later</p>
 <h2 id="see-also-137"><strong>See Also</strong></h2>
 <p><a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RANGE"><strong>range</strong>(3)</a>, <a href="RADIX"><strong>radix</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-128">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-127">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="set_exponent" class="slide section level1">
 <h1>SET_EXPONENT</h1>
@@ -9694,7 +9698,7 @@ dim=3 :( 2 3 )
 <p><strong>set_exponent</strong>(3) - [MODEL_COMPONENTS] Set the exponent of the model</p>
 <h2 id="syntax-171"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb479"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb479-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="bu">set_exponent</span>(x, i)</a></code></pre></div>
-<h2 id="description-167"><strong>Description</strong></h2>
+<h2 id="description-166"><strong>Description</strong></h2>
 <p><strong>set_exponent(x, i)</strong> returns the real number whose fractional part is that of <strong>x</strong> and whose exponent part is <strong>i</strong>.</p>
 <h2 id="arguments-165"><strong>Arguments</strong></h2>
 <ul>
@@ -9725,7 +9729,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later</p>
 <h2 id="see-also-138"><strong>See Also</strong></h2>
 <p><a href="DIGITS"><strong>digits</strong>(3)</a>, <a href="EPSILON"><strong>epsilon</strong>(3)</a>, <a href="EXPONENT"><strong>exponent</strong>(3)</a>, <a href="FRACTION"><strong>fraction</strong>(3)</a>, <a href="HUGE"><strong>huge</strong>(3)</a>, <a href="MAXEXPONENT"><strong>maxexponent</strong>(3)</a>, <a href="MINEXPONENT"><strong>minexponent</strong>(3)</a>, <a href="NEAREST"><strong>nearest</strong>(3)</a>, <a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RADIX"><strong>radix</strong>(3)</a>, <a href="RANGE"><strong>range</strong>(3)</a>, <a href="RRSPACING"><strong>rrspacing</strong>(3)</a>, <a href="SCALE"><strong>scale</strong>(3)</a>, <a href="SPACING"><strong>spacing</strong>(3)</a>, <a href="TINY"><strong>tiny</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-129">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-128">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="shape" class="slide section level1">
 <h1>SHAPE</h1>
@@ -9733,7 +9737,7 @@ dim=3 :( 2 3 )
 <p><strong>shape</strong>(3) - [ARRAY INQUIRY] Determine the shape of an array</p>
 <h2 id="syntax-172"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb482"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb482-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">shape</span>(source, <span class="fu">kind</span>)</a></code></pre></div>
-<h2 id="description-168"><strong>Description</strong></h2>
+<h2 id="description-167"><strong>Description</strong></h2>
 <p>Determines the shape of an array.</p>
 <h2 id="arguments-166"><strong>Arguments</strong></h2>
 <ul>
@@ -9772,7 +9776,7 @@ dim=3 :( 2 3 )
 <p>Fortran 95 and later; with KIND argument Fortran 2003 and later</p>
 <h2 id="see-also-139"><strong>See Also</strong></h2>
 <p><a href="RESHAPE"><strong>reshape</strong>(3)</a>, <a href="SIZE"><strong>size</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-130">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-129">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="shifta" class="slide section level1">
 <h1>SHIFTA</h1>
@@ -9780,7 +9784,7 @@ dim=3 :( 2 3 )
 <p><strong>shifta</strong>(3) - [BIT:SHIFT] shift bits right with fill</p>
 <h2 id="syntax-173"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb485"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb485-1" title="1"><span class="kw">result</span> <span class="kw">=</span> shifta(i, shift)</a></code></pre></div>
-<h2 id="description-169"><strong>Description</strong></h2>
+<h2 id="description-168"><strong>Description</strong></h2>
 <p>Returns a value corresponding to <strong>i</strong> with all of the bits shifted right by <strong>shift</strong> places. If the absolute value of <strong>shift</strong> is greater than <strong>bit_size(i)</strong>, the value is undefined. Bits shifted out from the right end are lost. The fill is arithmetic: the bits shifted in from the left end are equal to the leftmost bit, which in two’s complement representation is the sign bit.</p>
 <h2 id="arguments-167"><strong>Arguments</strong></h2>
 <ul>
@@ -9801,7 +9805,7 @@ dim=3 :( 2 3 )
 <p>Fortran 2008 and later</p>
 <h2 id="see-also-140"><strong>See Also</strong></h2>
 <p><a href="SHIFTL"><strong>shiftl</strong>(3)</a>, <a href="SHIFTR"><strong>shiftr</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-131">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-130">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="shiftl" class="slide section level1">
 <h1>SHIFTL</h1>
@@ -9809,7 +9813,7 @@ dim=3 :( 2 3 )
 <p><strong>shiftl</strong>(3) - [BIT:SHIFT] shift bits left</p>
 <h2 id="syntax-174"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb486"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb486-1" title="1"><span class="kw">result</span> <span class="kw">=</span> shiftl(i, shift)</a></code></pre></div>
-<h2 id="description-170"><strong>Description</strong></h2>
+<h2 id="description-169"><strong>Description</strong></h2>
 <p>Returns a value corresponding to <strong>i</strong> with all of the bits shifted left by <strong>shift</strong> places. If the absolute value of <strong>shift</strong> is greater than <strong>bit_size(i)</strong>, the value is undefined. Bits shifted out from the left end are lost, and bits shifted in from the right end are set to <strong>0</strong>.</p>
 <h2 id="arguments-168"><strong>Arguments</strong></h2>
 <ul>
@@ -9830,7 +9834,7 @@ dim=3 :( 2 3 )
 <p>Fortran 2008 and later</p>
 <h2 id="see-also-141"><strong>See Also</strong></h2>
 <p><a href="SHIFTA"><strong>shifta</strong>(3)</a>, <a href="SHIFTR"><strong>shiftr</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-132">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-131">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="shiftr" class="slide section level1">
 <h1>SHIFTR</h1>
@@ -9838,7 +9842,7 @@ dim=3 :( 2 3 )
 <p><strong>shiftr</strong>(3) - [BIT:SHIFT] shift bits right</p>
 <h2 id="syntax-175"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb487"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb487-1" title="1"><span class="kw">result</span> <span class="kw">=</span> shiftr(i, shift)</a></code></pre></div>
-<h2 id="description-171"><strong>Description</strong></h2>
+<h2 id="description-170"><strong>Description</strong></h2>
 <p>Returns a value corresponding to <strong>i</strong> with all of the bits shifted right by <strong>shift</strong> places. If the absolute value of <strong>shift</strong> is greater than <strong>bit_size(i)</strong>, the value is undefined. Bits shifted out from the right end are lost, and bits shifted in from the left end are set to 0.</p>
 <h2 id="arguments-169"><strong>Arguments</strong></h2>
 <ul>
@@ -9859,7 +9863,7 @@ dim=3 :( 2 3 )
 <p>Fortran 2008 and later</p>
 <h2 id="see-also-142"><strong>See Also</strong></h2>
 <p><a href="SHIFTA"><strong>shifta</strong>(3)</a>, <a href="SHIFTL"><strong>shiftl</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-133">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-132">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="sign" class="slide section level1">
 <h1>SIGN</h1>
@@ -9927,7 +9931,7 @@ dim=3 :( 2 3 )
 <a class="sourceLine" id="cb492-3" title="3">    <span class="kw">elemental</span> <span class="dt">TYPE(kind=KIND)</span> <span class="kw">function</span> <span class="bu">sinh</span>(x)</a>
 <a class="sourceLine" id="cb492-4" title="4">    <span class="dt">TYPE(kind=KIND)</span> <span class="dt">::</span> x</a></code></pre></div>
 <p>Where the returned value has the kind of the input value and TYPE may be <em>real</em> or <em>complex</em></p>
-<h2 id="description-172"><strong>Description</strong></h2>
+<h2 id="description-171"><strong>Description</strong></h2>
 <p><strong>sinh(x)</strong> computes the hyperbolic sine of <strong>x</strong>.</p>
 <p>The hyperbolic sine of x is defined mathematically as:</p>
 <p><strong>sinh(x) = (exp(x) - exp(-x)) / 2.0</strong></p>
@@ -9987,7 +9991,7 @@ dim=3 :( 2 3 )
 <li><a href="https://en.wikipedia.org/wiki/Hyperbolic_functions">Wikipedia:hyperbolic functions</a></li>
 </ul>
 <p><a href="ASINH"><strong>asinh</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-134">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-133">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="sin" class="slide section level1">
 <h1>SIN</h1>
@@ -9999,7 +10003,7 @@ dim=3 :( 2 3 )
 <a class="sourceLine" id="cb495-3" title="3">    <span class="kw">elemental</span> <span class="dt">TYPE(kind=KIND)</span> <span class="kw">function</span> <span class="bu">sin</span>(x)</a>
 <a class="sourceLine" id="cb495-4" title="4">    <span class="dt">TYPE(kind=KIND)</span> <span class="dt">::</span> x</a></code></pre></div>
 <p>Where the returned value has the kind of the input value and TYPE may be <em>real</em> or <em>complex</em></p>
-<h2 id="description-173"><strong>Description</strong></h2>
+<h2 id="description-172"><strong>Description</strong></h2>
 <p><strong>sin(x)</strong> computes the sine of an angle given the size of the angle in radians.</p>
 <p>The sine of an angle in a right-angled triangle is the ratio of the length of the side opposite the given angle divided by the length of the hypotenuse.</p>
 <h2 id="arguments-172"><strong>Arguments</strong></h2>
@@ -10088,7 +10092,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>size</strong>(3) - [ARRAY INQUIRY] Determine the size of an array</p>
 <h2 id="syntax-179"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb502"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb502-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">size</span>(array, <span class="bu">dim</span>, <span class="fu">kind</span>)</a></code></pre></div>
-<h2 id="description-174"><strong>Description</strong></h2>
+<h2 id="description-173"><strong>Description</strong></h2>
 <p>Determine the extent of <strong>array</strong> along a specified dimension <strong>dim</strong>, or the total number of elements in <strong>array</strong> if <strong>dim</strong> is absent.</p>
 <h2 id="arguments-173"><strong>Arguments</strong></h2>
 <ul>
@@ -10251,7 +10255,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later, with <strong>kind</strong> argument - Fortran 2003 and later</p>
 <h2 id="see-also-145"><strong>See Also</strong></h2>
 <p><a href="SHAPE"><strong>shape</strong>(3)</a>, [<strong>reshape</strong>(3)])(RESHAPE)</p>
-<h6 id="fortran-lang-intrinsic-descriptions-135">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-134">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="spacing" class="slide section level1">
 <h1>SPACING</h1>
@@ -10259,7 +10263,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>spacing</strong>(3) - [MODEL_COMPONENTS] Smallest distance between two numbers of a given type</p>
 <h2 id="syntax-180"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb505"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb505-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="bu">spacing</span>(x)</a></code></pre></div>
-<h2 id="description-175"><strong>Description</strong></h2>
+<h2 id="description-174"><strong>Description</strong></h2>
 <p>Determines the distance between the argument <strong>x</strong> and the nearest adjacent number of the same type.</p>
 <h2 id="arguments-174"><strong>Arguments</strong></h2>
 <ul>
@@ -10288,7 +10292,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later</p>
 <h2 id="see-also-146"><strong>See Also</strong></h2>
 <p><a href="DIGITS"><strong>digits</strong>(3)</a>, <a href="EPSILON"><strong>epsilon</strong>(3)</a>, <a href="EXPONENT"><strong>exponent</strong>(3)</a>, <a href="FRACTION"><strong>fraction</strong>(3)</a>, <a href="HUGE"><strong>huge</strong>(3)</a>, <a href="MAXEXPONENT"><strong>maxexponent</strong>(3)</a>, <a href="MINEXPONENT"><strong>minexponent</strong>(3)</a>, <a href="NEAREST"><strong>nearest</strong>(3)</a>, <a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RADIX"><strong>radix</strong>(3)</a>, <a href="RANGE"><strong>range</strong>(3)</a>, <a href="RRSPACING"><strong>rrspacing</strong>(3)</a>, <a href="SCALE"><strong>scale</strong>(3)</a>, <a href="SET_EXPONENT"><strong>set_exponent</strong>(3)</a>, <a href="TINY"><strong>tiny</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-136">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-135">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="spread" class="slide section level1">
 <h1>SPREAD</h1>
@@ -10302,7 +10306,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <a class="sourceLine" id="cb508-5" title="5">   <span class="dt">TYPE(kind=KIND)</span>    <span class="dt">::</span> source(..)</a>
 <a class="sourceLine" id="cb508-6" title="6">   <span class="dt">integer</span>,<span class="dt">intent(in)</span> <span class="dt">::</span> <span class="bu">dim</span></a>
 <a class="sourceLine" id="cb508-7" title="7">   <span class="dt">integer</span>,<span class="dt">intent(in)</span> <span class="dt">::</span> ncopies</a></code></pre></div>
-<h2 id="description-176"><strong>Description</strong></h2>
+<h2 id="description-175"><strong>Description</strong></h2>
 <p>Replicates a <strong>source</strong> array <strong>ncopies</strong> times along a specified dimension <strong>dim</strong>.</p>
 <p>If SOURCE is scalar, the shape of the result is (MAX (NCOPIES, 0)). and each element of the result has a value equal to SOURCE.</p>
 <h2 id="arguments-175"><strong>Arguments</strong></h2>
@@ -10395,7 +10399,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later</p>
 <h2 id="see-also-147"><strong>See Also</strong></h2>
 <p><a href="PACK"><strong>pack</strong>(3)</a>, <a href="UNPACK"><strong>unpack</strong>(3)</a>, <a href="MERGE"><strong>merge</strong>(3)</a>, <a href="PACK"><strong>pack</strong>(3)</a>, <a href="UNPACK"><strong>unpack</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-137">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-136">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="sqrt" class="slide section level1">
 <h1>SQRT</h1>
@@ -10408,7 +10412,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <a class="sourceLine" id="cb510-4" title="4">   <span class="dt">TYPE(kind=KIND)</span>,<span class="dt">intent(in)</span> <span class="dt">::</span> x</a>
 <a class="sourceLine" id="cb510-5" title="5">   <span class="dt">TYPE(kind=KIND)</span> <span class="dt">::</span> value</a></code></pre></div>
 <p>Where TYPE may be <em>real</em> or <em>complex</em> and <strong>KIND</strong> may be any kind valid for the declared type.</p>
-<h2 id="description-177"><strong>Description</strong></h2>
+<h2 id="description-176"><strong>Description</strong></h2>
 <p><strong>sqrt(x)</strong> computes the principal square root of <strong>x</strong>.</p>
 <p>In mathematics, a square root of a number <strong>x</strong> is a number <strong>y</strong> such that __y*y = x__.</p>
 <p>The number whose square root is being considered is known as the <em>radicand</em>.</p>
@@ -10462,7 +10466,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>storage_size</strong>(3) - [BIT:INQUIRY] Storage size in bits</p>
 <h2 id="syntax-183"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb513"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb513-1" title="1"><span class="kw">result</span> <span class="kw">=</span> storage_size(a, <span class="fu">kind</span>)</a></code></pre></div>
-<h2 id="description-178"><strong>Description</strong></h2>
+<h2 id="description-177"><strong>Description</strong></h2>
 <p>Returns the storage size of argument <strong>a</strong> in bits.</p>
 <h2 id="arguments-177"><strong>Arguments</strong></h2>
 <ul>
@@ -10499,7 +10503,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 2008 and later</p>
 <h2 id="see-also-148"><strong>See Also</strong></h2>
 <p><a href="C_SIZEOF"><strong>c_sizeof</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-138">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-137">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="sum" class="slide section level1">
 <h1>SUM</h1>
@@ -10508,7 +10512,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <h2 id="syntax-184"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb516"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb516-1" title="1">   <span class="kw">result</span> <span class="kw">=</span> <span class="fu">sum</span>(array<span class="kw">[</span>, mask<span class="kw">]</span>)</a>
 <a class="sourceLine" id="cb516-2" title="2">   <span class="kw">result</span> <span class="kw">=</span> <span class="fu">sum</span>(array, <span class="bu">dim</span><span class="kw">[</span>, mask<span class="kw">]</span>)</a></code></pre></div>
-<h2 id="description-179"><strong>Description</strong></h2>
+<h2 id="description-178"><strong>Description</strong></h2>
 <p>Adds the elements of ARRAY along dimension DIM if the corresponding element in MASK is TRUE.</p>
 <h2 id="arguments-178"><strong>Arguments</strong></h2>
 <ul>
@@ -10564,7 +10568,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later</p>
 <h2 id="see-also-149"><strong>See Also</strong></h2>
 <p>intrinsics</p>
-<h6 id="fortran-lang-intrinsic-descriptions-139">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-138">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="system_clock" class="slide section level1">
 <h1>SYSTEM_CLOCK</h1>
@@ -10578,7 +10582,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <a class="sourceLine" id="cb520-5" title="5">    <span class="co">! or !</span></a>
 <a class="sourceLine" id="cb520-6" title="6"><span class="dt">   real</span>,<span class="dt">intent(out)</span>,<span class="dt">optional</span>     <span class="dt">::</span> count_rate</a>
 <a class="sourceLine" id="cb520-7" title="7">   <span class="dt">integer</span>,<span class="dt">intent(out)</span>,<span class="dt">optional</span>  <span class="dt">::</span> count_max</a></code></pre></div>
-<h2 id="description-180"><strong>Description</strong></h2>
+<h2 id="description-179"><strong>Description</strong></h2>
 <p><strong>system_clock</strong> lets you measure durations of time with the precision of the smallest time increment generally available on a system by returning processor-dependent values based on the current value of the processor clock. The <strong>clock</strong> value is incremented by one for each clock count until the value <strong>count_max</strong> is reached and is then reset to zero at the next count. <strong>clock</strong> therefore is a modulo value that lies in the range <strong>0 to count_max</strong>. <strong>count_rate</strong> and <strong>count_max</strong> are assumed constant (even though CPU rates can vary on a single platform).</p>
 <p><strong>count_rate</strong> is system dependent and can vary depending on the kind of the arguments.</p>
 <p>If there is no clock, or querying the clock fails, <strong>count</strong> is set to <strong>-huge(count)</strong>, and <strong>count_rate</strong> and <strong>count_max</strong> are set to zero.</p>
@@ -10630,7 +10634,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later</p>
 <h2 id="see-also-150"><strong>See Also</strong></h2>
 <p><a href="DATE_AND_TIME"><strong>date_and_time</strong>(3)</a>, <a href="CPU_TIME"><strong>cpu_time</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-140">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-139">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="tanh" class="slide section level1">
 <h1>TANH</h1>
@@ -10638,7 +10642,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>tanh</strong>(3) - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic tangent function</p>
 <h2 id="syntax-186"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb524"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb524-1" title="1">x <span class="kw">=</span> <span class="bu">tanh</span>(x)</a></code></pre></div>
-<h2 id="description-181"><strong>Description</strong></h2>
+<h2 id="description-180"><strong>Description</strong></h2>
 <p><strong>tanh(x)</strong> computes the hyperbolic tangent of <strong>x</strong>.</p>
 <h2 id="arguments-180"><strong>Arguments</strong></h2>
 <ul>
@@ -10669,7 +10673,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <li><a href="https://en.wikipedia.org/wiki/Hyperbolic_functions">Wikipedia:hyperbolic functions</a></li>
 </ul>
 <p><a href="ATANH"><strong>atanh</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-141">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-140">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="tan" class="slide section level1">
 <h1>TAN</h1>
@@ -10677,7 +10681,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>tan</strong>(3) - [MATHEMATICS:TRIGONOMETRIC] Tangent function</p>
 <h2 id="syntax-187"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb528"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb528-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="bu">tan</span>(x)</a></code></pre></div>
-<h2 id="description-182"><strong>Description</strong></h2>
+<h2 id="description-181"><strong>Description</strong></h2>
 <p><strong>tan(x)</strong> computes the tangent of <strong>x</strong>.</p>
 <h2 id="arguments-181"><strong>Arguments</strong></h2>
 <ul>
@@ -10704,7 +10708,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>FORTRAN 77 and later. For a complex argument, Fortran 2008 or later.</p>
 <h2 id="see-also-152"><strong>See Also</strong></h2>
 <p><a href="ATAN"><strong>atan</strong>(3)</a>, <a href="COS"><strong>cos</strong>(3)</a>, <a href="SIN"><strong>sin</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-142">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-141">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="this_image" class="slide section level1">
 <h1>THIS_IMAGE</h1>
@@ -10713,7 +10717,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <h2 id="syntax-188"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb531"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb531-1" title="1"><span class="kw">result</span> <span class="kw">=</span> this_image() <span class="kw">result</span> <span class="kw">=</span> this_image(distance) <span class="kw">&amp;</span></a>
 <a class="sourceLine" id="cb531-2" title="2">         <span class="kw">&amp;</span> <span class="kw">result</span> <span class="kw">=</span> this_image(coarray, <span class="bu">dim</span>)</a></code></pre></div>
-<h2 id="description-183"><strong>Description</strong></h2>
+<h2 id="description-182"><strong>Description</strong></h2>
 <p>Returns the cosubscript for this image.</p>
 <h2 id="arguments-182"><strong>Arguments</strong></h2>
 <ul>
@@ -10756,7 +10760,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 2008 and later. With DISTANCE argument, TS 18508 or later</p>
 <h2 id="see-also-153"><strong>See Also</strong></h2>
 <p><a href="NUM_IMAGES"><strong>num_images</strong>(3)</a>, <a href="IMAGE_INDEX"><strong>image_index</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-143">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-142">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="tiny" class="slide section level1">
 <h1>TINY</h1>
@@ -10767,7 +10771,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <a class="sourceLine" id="cb534-2" title="2"><span class="dt">   real(kind=KIND)</span> <span class="kw">function</span>(x)</a>
 <a class="sourceLine" id="cb534-3" title="3"><span class="dt">   real(kind=KIND)</span> <span class="dt">::</span> x</a></code></pre></div>
 <p>where KIND may be any kind supported by type <em>real</em></p>
-<h2 id="description-184"><strong>Description</strong></h2>
+<h2 id="description-183"><strong>Description</strong></h2>
 <p><strong>tiny(x)</strong> returns the smallest positive (non zero) number of the type and kind of <strong>x</strong>.</p>
 <h2 id="arguments-183"><strong>Arguments</strong></h2>
 <ul>
@@ -10794,7 +10798,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later</p>
 <h2 id="see-also-154"><strong>See Also</strong></h2>
 <p><a href="DIGITS"><strong>digits</strong>(3)</a>, <a href="EPSILON"><strong>epsilon</strong>(3)</a>, <a href="EXPONENT"><strong>exponent</strong>(3)</a>, <a href="FRACTION"><strong>fraction</strong>(3)</a>, <a href="HUGE"><strong>huge</strong>(3)</a>, <a href="MAXEXPONENT"><strong>maxexponent</strong>(3)</a>, <a href="MINEXPONENT"><strong>minexponent</strong>(3)</a>, <a href="NEAREST"><strong>nearest</strong>(3)</a>, <a href="PRECISION"><strong>precision</strong>(3)</a>, <a href="RADIX"><strong>radix</strong>(3)</a>, <a href="RANGE"><strong>range</strong>(3)</a>, <a href="RRSPACING"><strong>rrspacing</strong>(3)</a>, <a href="SCALE"><strong>scale</strong>(3)</a>, <a href="SET_EXPONENT"><strong>set_exponent</strong>(3)</a>, <a href="SPACING"><strong>spacing</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-144">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-143">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="trailz" class="slide section level1">
 <h1>TRAILZ</h1>
@@ -10803,7 +10807,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <h2 id="syntax-190"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb537"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb537-1" title="1">   <span class="kw">result</span> <span class="kw">=</span> trailz(i) <span class="dt">integer</span> <span class="dt">::</span> <span class="kw">result</span></a>
 <a class="sourceLine" id="cb537-2" title="2">   <span class="dt">integer(kind=NNN)</span>,<span class="dt">intent(in)</span> <span class="dt">::</span> i</a></code></pre></div>
-<h2 id="description-185"><strong>Description</strong></h2>
+<h2 id="description-184"><strong>Description</strong></h2>
 <p><strong>trailz(3)</strong> returns the number of trailing zero bits of an <em>integer</em> value</p>
 <h2 id="arguments-184"><strong>Arguments</strong></h2>
 <ul>
@@ -10896,7 +10900,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>transfer</strong>(3) - [TYPE:MOLD] Transfer bit patterns</p>
 <h2 id="syntax-191"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb540"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb540-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">transfer</span>(source, mold, <span class="fu">size</span>)</a></code></pre></div>
-<h2 id="description-186"><strong>Description</strong></h2>
+<h2 id="description-185"><strong>Description</strong></h2>
 <p>Interprets the bitwise representation of <strong>source</strong> in memory as if it is the representation of a variable or array of the same type and type parameters as <strong>mold</strong>.</p>
 <p>This is approximately equivalent to the C concept of *casting* one type to another.</p>
 <h2 id="arguments-185"><strong>Arguments</strong></h2>
@@ -10953,7 +10957,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>There are disadvantages of this approach. It is problematic to define a union of data types because you must know the largest data object, which can vary by compiler or compile options. In many cases, an EQUIVALENCE would be far more effective, but Fortran Standards committees seem oblivious to the benefits of EQUIVALENCEs when used sparingly.</p>
 <h2 id="standard-187"><strong>Standard</strong></h2>
 <p>Fortran 90 and later</p>
-<h6 id="fortran-lang-intrinsic-descriptions-145">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-144">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="transpose" class="slide section level1">
 <h1>TRANSPOSE</h1>
@@ -10961,7 +10965,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>transpose</strong>(3) - [ARRAY MANIPULATION] Transpose an array of rank two</p>
 <h2 id="syntax-192"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb543"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb543-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">transpose</span>(matrix)</a></code></pre></div>
-<h2 id="description-187"><strong>Description</strong></h2>
+<h2 id="description-186"><strong>Description</strong></h2>
 <p>Transpose an array of rank two. Element (i, j) of the result has the value <strong>matrix(j, i)</strong>, for all i, j.</p>
 <h2 id="arguments-186"><strong>Arguments</strong></h2>
 <ul>
@@ -11022,7 +11026,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
     &gt; [     5,    50, -1055 ]</code></pre>
 <h2 id="standard-188"><strong>Standard</strong></h2>
 <p>Fortran 95 and later</p>
-<h6 id="fortran-lang-intrinsic-descriptions-146">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-145">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="trim" class="slide section level1">
 <h1>TRIM</h1>
@@ -11030,7 +11034,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>trim</strong>(3) - [CHARACTER:WHITESPACE] Remove trailing blank characters of a string</p>
 <h2 id="syntax-193"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb546"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb546-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">trim</span>(string)</a></code></pre></div>
-<h2 id="description-188"><strong>Description</strong></h2>
+<h2 id="description-187"><strong>Description</strong></h2>
 <p>Removes trailing blank characters of a string.</p>
 <h2 id="arguments-187"><strong>Arguments</strong></h2>
 <ul>
@@ -11071,7 +11075,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <ul>
 <li><strong>Nonelemental:</strong> <a href="LEN_TRIM"><strong>len_trim</strong>(3)</a>, <a href="LEN"><strong>len</strong>(3)</a>, <a href="REPEAT"><strong>repeat</strong>(3)</a>, <a href="TRIM"><strong>trim</strong>(3)</a></li>
 </ul>
-<h6 id="fortran-lang-intrinsic-descriptions-147">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-146">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="ubound" class="slide section level1">
 <h1>UBOUND</h1>
@@ -11079,7 +11083,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>ubound</strong>(3) - [ARRAY INQUIRY] Upper dimension bounds of an array</p>
 <h2 id="syntax-194"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb549"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb549-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">ubound</span>(array, <span class="bu">dim</span>, <span class="fu">kind</span>)</a></code></pre></div>
-<h2 id="description-189"><strong>Description</strong></h2>
+<h2 id="description-188"><strong>Description</strong></h2>
 <p>Returns the upper bounds of an array, or a single upper bound along the <strong>dim</strong> dimension.</p>
 <h2 id="arguments-188"><strong>Arguments</strong></h2>
 <ul>
@@ -11161,7 +11165,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later, with KIND argument Fortran 2003 and later</p>
 <h2 id="see-also-157"><strong>See Also</strong></h2>
 <p><a href="LBOUND"><strong>lbound</strong>(3)</a>, <a href="CO_UBOUND"><strong>co_ubound</strong>(3)</a>, [<strong>co_lbound</strong>(3)(CO_LBOUND)]</p>
-<h6 id="fortran-lang-intrinsic-descriptions-148">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-147">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="unpack" class="slide section level1">
 <h1>UNPACK</h1>
@@ -11169,7 +11173,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p><strong>unpack</strong>(3) - [ARRAY CONSTRUCTION] Store the elements of a vector in an array of higher rank</p>
 <h2 id="syntax-195"><strong>Syntax</strong></h2>
 <div class="sourceCode" id="cb552"><pre class="sourceCode fortran"><code class="sourceCode fortran"><a class="sourceLine" id="cb552-1" title="1"><span class="kw">result</span> <span class="kw">=</span> <span class="fu">unpack</span>(vector, mask, field)</a></code></pre></div>
-<h2 id="description-190"><strong>Description</strong></h2>
+<h2 id="description-189"><strong>Description</strong></h2>
 <p>Store the elements of <strong>vector</strong> in an array of higher rank.</p>
 <h2 id="arguments-189"><strong>Arguments</strong></h2>
 <ul>
@@ -11211,7 +11215,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <p>Fortran 95 and later</p>
 <h2 id="see-also-158"><strong>See Also</strong></h2>
 <p><a href="PACK"><strong>pack</strong>(3)</a>, <a href="MERGE"><strong>merge</strong>(3)</a>, <a href="PACK"><strong>pack</strong>(3)</a>, <a href="SPREAD"><strong>spread</strong>(3)</a>, <a href="UNPACK"><strong>unpack</strong>(3)</a></p>
-<h6 id="fortran-lang-intrinsic-descriptions-149">fortran-lang intrinsic descriptions</h6>
+<h6 id="fortran-lang-intrinsic-descriptions-148">fortran-lang intrinsic descriptions</h6>
 </div>
 <div id="verify" class="slide section level1">
 <h1>VERIFY</h1>
@@ -11226,7 +11230,7 @@ LAX: N 33 degrees 56.4&#39;,  W 118 degrees 24.0&#39;</code></pre>
 <a class="sourceLine" id="cb555-6" title="6">   <span class="dt">character(len=*)</span>,<span class="dt">intent(in)</span> <span class="dt">::</span> set</a>
 <a class="sourceLine" id="cb555-7" title="7">   <span class="dt">logical</span>,<span class="dt">intent(in)</span>,<span class="dt">optional</span> <span class="dt">::</span> back</a>
 <a class="sourceLine" id="cb555-8" title="8">   <span class="dt">integer</span>,<span class="dt">intent(in)</span>,<span class="dt">optional</span> <span class="dt">::</span> <span class="fu">KIND</span></a></code></pre></div>
-<h2 id="description-191"><strong>Description</strong></h2>
+<h2 id="description-190"><strong>Description</strong></h2>
 <p>Verifies that all the characters in <strong>string</strong> belong to the set of characters in <strong>set</strong> by identifying the first character in the string(s) that is not in the set(s).</p>
 <p>If <strong>back</strong> is either absent or equals <strong>.false.</strong>, this function returns the position of the leftmost character of <strong>string</strong> that is not in <strong>set</strong>.</p>
 <p>If <strong>back</strong> equals <strong>.true.</strong>, the rightmost position is returned.</p>

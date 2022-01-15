@@ -6,19 +6,28 @@ SYNTAX
 
     result = radix(x)
 
+       function radix(x) result(r)
+       TYPE(kind=KIND),intent(in) :: x
+       integer :: r
+
+where TYPE is _integer_ or _real_ and KIND is any kind supported by the
+type.
+
 DESCRIPTION
 
-RADIX(X) returns the base of the model representing the entity X.
+RADIX(X) returns the base of the model representing the entity X. This
+helps to allow for a generic model to be modeled in general, but on a
+binary computer will just always return 2.
 
 ARGUMENTS
 
     X
-        Shall be of type _integer_ or _real_
+        The type of this value is used to determine which type model to
+        query
 
 RETURNS
 
-The return value is a scalar of type _integer_ and of the default
-integer kind.
+the base of the model for values the same type as X
 
 EXAMPLES
 
@@ -47,4 +56,4 @@ DIGITS(3), EPSILON(3), EXPONENT(3), FRACTION(3), HUGE(3),
 MAXEXPONENT(3), MINEXPONENT(3), NEAREST(3), PRECISION(3), RANGE(3),
 RRSPACING(3), SCALE(3), SET_EXPONENT(3), SPACING(3), TINY(3)
 
-fortran-lang intrinsic descriptions
+fortran-lang intrinsic descriptions (license:MIT) @urbanjost
