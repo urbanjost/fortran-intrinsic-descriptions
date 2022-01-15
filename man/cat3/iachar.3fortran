@@ -97,4 +97,4 @@ of arguments, and search for certain arguments:
 
 -   NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 
-fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+fortran-lang intrinsic descriptions (license MIT) @urbanjost

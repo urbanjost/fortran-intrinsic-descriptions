@@ -132,4 +132,4 @@ SEE ALSO
 IEOR(3), IBCLR(3), NOT(3), BTEST(3), IBCLR(3), IBITS(3), IBSET(3),
 IAND(3), IOR(3), IEOR(3)
 
-fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+fortran-lang intrinsic descriptions (license MIT) @urbanjost

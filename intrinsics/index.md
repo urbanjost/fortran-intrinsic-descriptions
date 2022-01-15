@@ -122,7 +122,7 @@ specially-formatted last line. For example, change
 ```
 to
 ```text
-###### fortran-lang intrinsic descriptions (Iicense: MIT)
+###### fortran-lang intrinsic descriptions (Iicense: MIT) @urbanjost
 ```
 
 ###### Written in [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) [kramdown](https://kramdown.gettalong.org/syntax.html)

@@ -2715,7 +2715,7 @@ end program demo_bit_size
 
 Fortran 95 and later
 
-###### fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+###### fortran-lang intrinsic descriptions (license MIT) @urbanjost
 # BLE
 
 ## __Name__
@@ -5024,7 +5024,7 @@ Results:
 
 FORTRAN 77 and later
 
-###### fortran-lang intrinsic descriptions (license: MIT)
+###### fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 # DOT\_PRODUCT
 
 ## __Name__
@@ -5538,7 +5538,7 @@ Fortran 2008 and later
 
 - [Wikipedia:error function](https://en.wikipedia.org/wiki/Error_function)
 
-###### fortran-lang intrinsic descriptions license: MIT)
+###### fortran-lang intrinsic descriptions license: MIT) @urbanjost
 # ERFC\_SCALED
 
 ## __Name__
@@ -7135,7 +7135,7 @@ of arguments, and search for certain arguments:
     [__len__(3)](LEN),
     [__repeat__(3)](REPEAT), [__trim__(3)](TRIM)
 
-###### fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+###### fortran-lang intrinsic descriptions (license MIT) @urbanjost
 # IALL
 
 ## __Name__
@@ -10142,7 +10142,7 @@ end program demo_merge_bits
 
 Fortran 2008 and later
 
-###### fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+###### fortran-lang intrinsic descriptions (license MIT) @urbanjost
 # MERGE
 
 ## __Name__
@@ -11020,7 +11020,7 @@ Fortran 95 and later
 [__ior__(3)](IOR),
 [__ieor__(3)](IEOR)
 
-###### fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+###### fortran-lang intrinsic descriptions (license MIT) @urbanjost
 
 # NEAREST
 
@@ -13609,11 +13609,7 @@ implicit none
 
    print *, sign( -12.0, [1.0, 0.0, -1.0] )
 
-<<<<<<< HEAD
-   print *,'can I distinguish 0 from -0? ',sign(1.0,-0.0).ne.sign(1.0, 0.0)
-=======
-   print *,  'can I distinguish 0 from -0? ', sign( 1.0, -0.0 ) .ne. sign( 1.0, 0.0 )
->>>>>>> 9b8cd0c5596d00eea5cc52b465f7b321b7e6c2d5
+   print *,'can I distinguish 0 from -0? ',sign(1.0,-0.0).ne.sign(1.0,0.0)
 end program demo_sign
 ```
 Results:
@@ -13628,7 +13624,7 @@ Results:
 
 FORTRAN 77 and later
 
-###### fortran-lang intrinsic descriptions (license: MIT)
+###### fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 # SINH
 
 ## __Name__

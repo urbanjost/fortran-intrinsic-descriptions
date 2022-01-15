@@ -3052,7 +3052,7 @@ textblock=[character(len=256) :: &
 '', &
 'Fortran 95 and later', &
 '', &
-'fortran-lang intrinsic descriptions (License: MIT) @urbanjost', &
+'fortran-lang intrinsic descriptions (license MIT) @urbanjost', &
 '']
 
 shortname="bit_size"
@@ -5530,7 +5530,7 @@ textblock=[character(len=256) :: &
 '', &
 'FORTRAN 77 and later', &
 '', &
-'fortran-lang intrinsic descriptions (license: MIT)', &
+'fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '']
 
 shortname="dim"
@@ -6145,7 +6145,7 @@ textblock=[character(len=256) :: &
 '', &
 '-   Wikipedia:error function', &
 '', &
-'fortran-lang intrinsic descriptions license: MIT)', &
+'fortran-lang intrinsic descriptions license: MIT) @urbanjost', &
 '']
 
 shortname="erfc"
@@ -8114,7 +8114,7 @@ textblock=[character(len=256) :: &
 '', &
 '-   NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)', &
 '', &
-'fortran-lang intrinsic descriptions (License: MIT) @urbanjost', &
+'fortran-lang intrinsic descriptions (license MIT) @urbanjost', &
 '']
 
 shortname="iachar"
@@ -11414,7 +11414,7 @@ textblock=[character(len=256) :: &
 '', &
 'Fortran 2008 and later', &
 '', &
-'fortran-lang intrinsic descriptions (License: MIT) @urbanjost', &
+'fortran-lang intrinsic descriptions (license MIT) @urbanjost', &
 '']
 
 shortname="merge_bits"
@@ -12173,7 +12173,7 @@ textblock=[character(len=256) :: &
 'IEOR(3), IBCLR(3), NOT(3), BTEST(3), IBCLR(3), IBITS(3), IBSET(3),', &
 'IAND(3), IOR(3), IEOR(3)', &
 '', &
-'fortran-lang intrinsic descriptions (License: MIT) @urbanjost', &
+'fortran-lang intrinsic descriptions (license MIT) @urbanjost', &
 '']
 
 shortname="mvbits"
@@ -14900,11 +14900,7 @@ textblock=[character(len=256) :: &
 '', &
 '       print *, sign( -12.0, [1.0, 0.0, -1.0] )', &
 '', &
-'    <<<<<<< HEAD', &
-'       print *,''can I distinguish 0 from -0? '',sign(1.0,-0.0).ne.sign(1.0, 0.0)', &
-'    =======', &
-'       print *,  ''can I distinguish 0 from -0? '', sign( 1.0, -0.0 ) .ne. sign( 1.0, 0.0 )', &
-'    >>>>>>> 9b8cd0c5596d00eea5cc52b465f7b321b7e6c2d5', &
+'       print *,''can I distinguish 0 from -0? '',sign(1.0,-0.0).ne.sign(1.0,0.0)', &
 '    end program demo_sign', &
 '', &
 'Results:', &
@@ -14919,7 +14915,7 @@ textblock=[character(len=256) :: &
 '', &
 'FORTRAN 77 and later', &
 '', &
-'fortran-lang intrinsic descriptions (license: MIT)', &
+'fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '']
 
 shortname="sign"

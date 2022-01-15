@@ -117,4 +117,4 @@ end program demo_merge_bits
 
 Fortran 2008 and later
 
-###### fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+###### fortran-lang intrinsic descriptions (license MIT) @urbanjost

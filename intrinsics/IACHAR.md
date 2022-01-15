@@ -109,4 +109,4 @@ of arguments, and search for certain arguments:
     [__len__(3)](LEN),
     [__repeat__(3)](REPEAT), [__trim__(3)](TRIM)
 
-###### fortran-lang intrinsic descriptions (License: MIT) @urbanjost
+###### fortran-lang intrinsic descriptions (license MIT) @urbanjost
