@@ -61,7 +61,7 @@ same type as __i__ if __i__ is of type _integer_, otherwise the same type
 as __j__.
 
 ## __Example__
-
+```fortran
 program demo_merge_bits
 use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
 implicit none
@@ -102,6 +102,16 @@ character(len=*),parameter :: fmt='(*(g0, 1X))'
    &   iand(o'12345', not(int( z'1234', kind=int16))))
 
 end program demo_merge_bits
+```
+  Results:
+```text
+    MERGE_BITS( 5,10,41) should be 3.=>           3
+    MERGE_BITS(13,18,22) should be 4.=>           4
+   should get all zero bits =>0000000000000000
+   should get all ones bits =>1111111111111111
+   32767 32751 5877
+   32767 32767 5877
+```
 
 ## __Standard__
 
