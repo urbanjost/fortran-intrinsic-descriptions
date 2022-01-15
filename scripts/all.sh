@@ -107,7 +107,7 @@ mandb -c .
 env MANWIDTH=256 man --manpath=$BASE/man -k .|col -b
 env MANWIDTH=80  man --manpath=$BASE/man --regex '.*'|
     col -b |
-    expand --tabs=3 
+    expand --tabs=3 > /tmp/allman.txt
 ################################################################################
 cd $BASE 
 tar cvfz docs/fortran.tgz man
@@ -514,11 +514,12 @@ fpm install --prefix $BASE
 )
 
 # build new version of demo programs
-PROBLEMS
+
 fpm build 
 
 # build fpm documenation from help too
-#################################################
+
+###############################################################################
 #@(#) create man-pages, markdown and html slidy(1) files of fpm(1) help text using txt2man(1) and pandoc(1)
 # liked results better tnan from txt to man-pages using pandoc
 # can use groff to turn man-pages into a lot of formats as well
