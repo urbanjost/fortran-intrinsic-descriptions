@@ -12,7 +12,7 @@ __radix__(3) - \[NUMERIC MODEL\] Base of a model number
 result = radix(x)
 
    function radix(x) result(r)
-   TYPE(kind=KIND),intent(in) :: x
+   TYPE(kind=KIND),intent(in) :: x(..)
    integer :: r
 ```
 where TYPE is _integer_ or _real_ and KIND is any kind supported by
@@ -26,8 +26,8 @@ on a binary computer will just always return 2.
 ## __Arguments__
 
   - __x__
-    : The type of this value is used to determine which type model
-    to query
+    : The type of this value (a scalar or array) is used to determine
+    which type model to query
 
 ## __Returns__
 
