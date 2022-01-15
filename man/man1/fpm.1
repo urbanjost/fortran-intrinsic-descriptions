@@ -10,3 +10,214 @@
 .ta T 0.2i
 .nr IN 0.2i
 ." -----------------------------------------------------------------
+.SH NAME
+\fBfpm\fP(1) - A Fortran package manager and build system
+
+.SH SYNOPSIS
+\fBfpm\fP \fISUBCOMMAND\fP [SUBCOMMAND_OPTIONS]
+.PP
+\fBfpm\fP \fB--help\fP|\fB--version\fP|\fB--list\fP
+.fam T
+.fi
+.SH DESCRIPTION
+\fBfpm\fP(1) is a package manager that helps you create Fortran projects
+from source -- it automatically determines dependencies!
+.PP
+Most significantly \fBfpm\fP(1) lets you draw upon other \fBfpm\fP(1) packages
+in distributed \fBgit\fP(1) repositories as if the packages were a basic
+part of your default programming environment, as well as letting
+you share your projects with others in a similar manner.
+.PP
+All output goes into the directory "build/" which can generally be
+removed and rebuilt if required. Note that if external packages are
+being used you need network connectivity to rebuild from scratch.
+.SH SUBCOMMANDS
+Valid \fBfpm\fP(1) subcommands are:
+.IP \(bu 3
+build Compile the packages into the "build/" directory.
+.IP \(bu 3
+new Create a new Fortran package directory with sample files.
+.IP \(bu 3
+update Update the project dependencies.
+.IP \(bu 3
+run Run the local package binaries. defaults to all binaries
+for that release.
+.IP \(bu 3
+test Run the tests.
+.IP \(bu 3
+help Alternate to the \fB--help\fP switch for displaying help text.
+.IP \(bu 3
+list Display brief descriptions of all subcommands.
+.IP \(bu 3
+install Install project
+.PP
+Their syntax is
+.PP
+.nf
+.fam C
+    build [--profile PROF] [--flag FFLAGS] [--list] [--compiler COMPILER_NAME]
+          [--tests]
+    new NAME [[--lib|--src] [--app] [--test] [--example]]|
+             [--full|--bare][--backfill]
+    update [NAME(s)] [--fetch-only] [--clean]
+    run [[--target] NAME(s)] [--profile PROF] [--flag FFLAGS] [--list] [--all]
+        [--example] [--runner "CMD"] [--compiler COMPILER_NAME] [-- ARGS]
+    test [[--target] NAME(s)] [--profile PROF] [--flag FFLAGS] [--list]
+         [--runner "CMD"] [--compiler COMPILER_NAME] [-- ARGS]
+    help [NAME(s)]
+    list [--list]
+    install [--profile PROF] [--flag FFLAGS] [--no-rebuild] [--prefix PATH]
+    [options]
+
+.fam T
+.fi
+.SH SUBCOMMAND OPTIONS
+\fB-C\fP, \fB--directory\fP PATH
+Change working directory to PATH before running any command
+.TP
+.B \fB--profile\fP PROF
+selects the compilation profile for the build.
+Currently available profiles are "release" for
+high optimization and "debug" for full debug options.
+If \fB--flag\fP is not specified the "debug" flags are the
+default.
+.TP
+.B \fB--compiler\fP NAME
+Specify a compiler name. The default is "gfortran"
+unless set by the environment variable FPM_FC.
+.TP
+.B \fB--c-compiler\fP NAME
+Specify the C compiler name. Automatically determined by
+default unless set by the environment variable FPM_CC.
+.TP
+.B \fB--archiver\fP NAME
+Specify the archiver name. Automatically determined by
+default unless set by the environment variable FPM_AR.
+.TP
+.B \fB--flag\fP
+FFLAGS    selects compile arguments for the build, the default value is
+set by the FPM_FFLAGS environment variable. These are added
+to the profile options if \fB--profile\fP is specified, else these
+these options override the defaults. Note object and .mod
+directory locations are always built in.
+.TP
+.B \fB--c-flag\fP CFLAGS
+selects compile arguments specific for C source in the build.
+The default value is set by the FPM_CFLAGS environment
+variable.
+.TP
+.B \fB--link-flag\fP LDFLAGS
+select arguments passed to the linker for the build. The
+default value is set by the FPM_LDFLAGS environment variable.
+.RS
+.TP
+.B \fB--list\fP
+List candidates instead of building or running them. On
+the \fBfpm\fP(1) command this shows a brief list of subcommands.
+.TP
+.B \fB--runner\fP CMD
+Provides a command to prefix program execution paths.
+.TP
+.B -- ARGS
+Arguments to pass to executables.
+.SH VALID FOR ALL SUBCOMMANDS
+.TP
+.B \fB--help\fP
+Show help text and exit
+.TP
+.B \fB--verbose\fP
+Display additional information when available
+.TP
+.B \fB--version\fP
+Show version information and exit.
+.RE
+.PP
+@file
+You may replace the default options for the \fBfpm\fP(1) command from a
+file if your first options begin with @file. Initial options will
+then be read from the "response file" "file.rsp" in the current
+directory.
+.RS
+.PP
+If "file" does not exist or cannot be read, then an error occurs and
+the program stops. Each line of the file is prefixed with "options"
+and interpreted as a separate argument. The file itself may not
+contain @file arguments. That is, it is not processed recursively.
+.PP
+For more information on response files see
+.PP
+.nf
+.fam C
+      https://urbanjost.github.io/M_CLI2/set_args.3m_cli2.html
+
+.fam T
+.fi
+The basic functionality described here will remain the same, but
+other features described at the above reference may change.
+.PP
+An example file:
+.PP
+.nf
+.fam C
+     # my build options
+     options build
+     options --compiler gfortran
+     options --flag "-pg -static -pthread -Wunreachable-code -Wunused \\
+      -Wuninitialized -g -O -fbacktrace -fdump-core -fno-underscoring \\
+      -frecord-marker=4 -L/usr/X11R6/lib -L/usr/X11R6/lib64 -lX11"
+
+.fam T
+.fi
+Note \fB--flag\fP would have to be on one line as response files do not
+(currently) allow for continued lines or multiple specifications of
+the same option.
+.SH ENVIRONMENT VARIABLES
+.TP
+.B FPM_FC
+sets the path to the Fortran compiler used for the build,
+will be overwritten by \fB--compiler\fP command line option
+.TP
+.B FPM_FFLAGS
+sets the arguments for the Fortran compiler
+will be overwritten by \fB--flag\fP command line option
+.TP
+.B FPM_CC
+sets the path to the C compiler used for the build,
+will be overwritten by \fB--c-compiler\fP command line option
+.TP
+.B FPM_CFLAGS
+sets the arguments for the C compiler
+will be overwritten by \fB--c-flag\fP command line option
+.TP
+.B FPM_AR
+sets the path to the archiver used for the build,
+will be overwritten by \fB--archiver\fP command line option
+.TP
+.B FPM_LDFLAGS
+sets additional link arguments for creating executables
+will be overwritten by \fB--link-flag\fP command line option
+.SH EXAMPLES
+sample commands:
+.PP
+.nf
+.fam C
+    fpm new mypackage --app --test
+    fpm build
+    fpm test
+    fpm run
+    fpm run --example
+    fpm new --help
+    fpm run myprogram --profile release -- -x 10 -y 20 --title "my title"
+    fpm install --prefix ~/.local
+
+.fam T
+.fi
+.SH SEE ALSO
+
+.IP \(bu 3
+The \fBfpm\fP(1) home page is at https://github.com/fortran-lang/\fBfpm\fP
+.IP \(bu 3
+Registered \fBfpm\fP(1) packages are at https://fortran-lang.org/packages
+.IP \(bu 3
+The \fBfpm\fP(1) TOML file format is described at
+https://github.com/fortran-lang/\fBfpm\fP/blob/main/manifest-reference.md

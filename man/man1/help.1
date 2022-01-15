@@ -10,3 +10,37 @@
 .ta T 0.2i
 .nr IN 0.2i
 ." -----------------------------------------------------------------
+.SH NAME
+\fBhelp\fP(1) - the \fBfpm\fP(1) subcommand to display help
+
+.SH SYNOPSIS
+\fIfpm\fP \fIhelp\fP [fpm] [new] [build] [run] [test] [help] [version] [manual]
+[runner]
+.fam T
+.fi
+.SH DESCRIPTION
+The "\fIfpm\fP \fIhelp\fP" command is an alternative to the --\fIhelp\fP parameter
+on the \fIfpm\fP(1) command and its subcommands.
+.SH OPTIONS
+.TP
+.B \fBNAME\fP(s)
+A list of topic names to display. All the subcommands
+have their own page (\fInew\fP, \fIbuild\fP, \fIrun\fP, \fItest\fP, \.\.\.).
+.RS
+.PP
+The special name "\fImanual\fP" displays all the \fIfpm\fP(1)
+built-in documentation.
+.PP
+The default is to display \fIhelp\fP for the \fIfpm\fP(1) command
+itself.
+.SH EXAMPLES
+Sample usage:
+.PP
+.nf
+.fam C
+     fpm help           # general fpm(1) command help
+     fpm help version   # show program version
+     fpm help new       # display help for "new" subcommand
+     fpm help manual    # All fpm(1) built-in documentation
+
+

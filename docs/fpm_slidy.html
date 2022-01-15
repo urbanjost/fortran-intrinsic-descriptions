@@ -18,36 +18,628 @@
 <body>
 <div id="fpm" class="slide section level1">
 <h1>fpm</h1>
+<h2 id="name"><strong>name</strong></h2>
+<p><strong>fpm</strong>(1) - A Fortran package manager and build system</p>
+<h2 id="synopsis"><strong>synopsis</strong></h2>
+<p><strong>fpm</strong> <em>SUBCOMMAND</em> [SUBCOMMAND_OPTIONS]</p>
+<p><strong>fpm</strong> <strong>--help</strong>|<strong>--version</strong>|<strong>--list</strong></p>
+<h2 id="description"><strong>description</strong></h2>
+<p><strong>fpm</strong>(1) is a package manager that helps you create Fortran projects from source -- it automatically determines dependencies!</p>
+<p>Most significantly <strong>fpm</strong>(1) lets you draw upon other <strong>fpm</strong>(1) packages in distributed <strong>git</strong>(1) repositories as if the packages were a basic part of your default programming environment, as well as letting you share your projects with others in a similar manner.</p>
+<p>All output goes into the directory &quot;build/&quot; which can generally be removed and rebuilt if required. Note that if external packages are being used you need network connectivity to rebuild from scratch.</p>
+<h2 id="subcommands"><strong>subcommands</strong></h2>
+<p>Valid <strong>fpm</strong>(1) subcommands are:</p>
+<ul>
+<li><p>build Compile the packages into the &quot;build/&quot; directory.</p></li>
+<li><p>new Create a new Fortran package directory with sample files.</p></li>
+<li><p>update Update the project dependencies.</p></li>
+<li><p>run Run the local package binaries. defaults to all binaries for that release.</p></li>
+<li><p>test Run the tests.</p></li>
+<li><p>help Alternate to the <strong>--help</strong> switch for displaying help text.</p></li>
+<li><p>list Display brief descriptions of all subcommands.</p></li>
+<li><p>install Install project</p></li>
+</ul>
+<p>Their syntax is</p>
+<pre><code>    build [--profile PROF] [--flag FFLAGS] [--list] [--compiler COMPILER_NAME]
+          [--tests]
+    new NAME [[--lib|--src] [--app] [--test] [--example]]|
+             [--full|--bare][--backfill]
+    update [NAME(s)] [--fetch-only] [--clean]
+    run [[--target] NAME(s)] [--profile PROF] [--flag FFLAGS] [--list] [--all]
+        [--example] [--runner &quot;CMD&quot;] [--compiler COMPILER_NAME] [-- ARGS]
+    test [[--target] NAME(s)] [--profile PROF] [--flag FFLAGS] [--list]
+         [--runner &quot;CMD&quot;] [--compiler COMPILER_NAME] [-- ARGS]
+    help [NAME(s)]
+    list [--list]
+    install [--profile PROF] [--flag FFLAGS] [--no-rebuild] [--prefix PATH]
+    [options]
+</code></pre>
+<h2 id="subcommand-options"><strong>subcommand options</strong></h2>
+<p><strong>-C</strong>, <strong>--directory</strong> PATH Change working directory to PATH before running any command</p>
+<ul>
+<li><p><strong><strong>--profile</strong> PROF</strong><br />
+selects the compilation profile for the build. Currently available profiles are &quot;release&quot; for high optimization and &quot;debug&quot; for full debug options. If <strong>--flag</strong> is not specified the &quot;debug&quot; flags are the default.</p></li>
+<li><p><strong><strong>--compiler</strong> NAME</strong><br />
+Specify a compiler name. The default is &quot;gfortran&quot; unless set by the environment variable FPM_FC.</p></li>
+<li><p><strong><strong>--c-compiler</strong> NAME</strong><br />
+Specify the C compiler name. Automatically determined by default unless set by the environment variable FPM_CC.</p></li>
+<li><p><strong><strong>--archiver</strong> NAME</strong><br />
+Specify the archiver name. Automatically determined by default unless set by the environment variable FPM_AR.</p></li>
+<li><p><strong><strong>--flag</strong></strong><br />
+FFLAGS selects compile arguments for the build, the default value is set by the FPM_FFLAGS environment variable. These are added to the profile options if <strong>--profile</strong> is specified, else these these options override the defaults. Note object and .mod directory locations are always built in.</p></li>
+<li><p><strong><strong>--c-flag</strong> CFLAGS</strong><br />
+selects compile arguments specific for C source in the build. The default value is set by the FPM_CFLAGS environment variable.</p></li>
+<li><p><strong><strong>--link-flag</strong> LDFLAGS</strong><br />
+select arguments passed to the linker for the build. The default value is set by the FPM_LDFLAGS environment variable.</p>
+<ul>
+<li><p><strong><strong>--list</strong></strong><br />
+List candidates instead of building or running them. On the <strong>fpm</strong>(1) command this shows a brief list of subcommands.</p></li>
+<li><p><strong><strong>--runner</strong> CMD</strong><br />
+Provides a command to prefix program execution paths.</p></li>
+<li><p><strong>-- ARGS</strong><br />
+Arguments to pass to executables.</p></li>
+</ul></li>
+</ul>
+<h2 id="valid-for-all-subcommands"><strong>valid for all subcommands</strong></h2>
+<ul>
+<li><p><strong><strong>--help</strong></strong><br />
+Show help text and exit</p></li>
+<li><p><strong><strong>--verbose</strong></strong><br />
+Display additional information when available</p></li>
+<li><p><strong><strong>--version</strong></strong><br />
+Show version information and exit.</p></li>
+</ul>
+<p>@file You may replace the default options for the <strong>fpm</strong>(1) command from a file if your first options begin with @file. Initial options will then be read from the &quot;response file&quot; &quot;file.rsp&quot; in the current directory.</p>
+<p>If &quot;file&quot; does not exist or cannot be read, then an error occurs and the program stops. Each line of the file is prefixed with &quot;options&quot; and interpreted as a separate argument. The file itself may not contain @file arguments. That is, it is not processed recursively.</p>
+<p>For more information on response files see</p>
+<pre><code>      https://urbanjost.github.io/M_CLI2/set_args.3m_cli2.html
+</code></pre>
+<p>The basic functionality described here will remain the same, but other features described at the above reference may change.</p>
+<p>An example file:</p>
+<pre><code>     # my build options
+     options build
+     options --compiler gfortran
+     options --flag &quot;-pg -static -pthread -Wunreachable-code -Wunused \
+      -Wuninitialized -g -O -fbacktrace -fdump-core -fno-underscoring \
+      -frecord-marker=4 -L/usr/X11R6/lib -L/usr/X11R6/lib64 -lX11&quot;
+</code></pre>
+<p>Note <strong>--flag</strong> would have to be on one line as response files do not (currently) allow for continued lines or multiple specifications of the same option.</p>
+<h2 id="environment-variables"><strong>environment variables</strong></h2>
+<ul>
+<li><p><strong>FPM_FC</strong><br />
+sets the path to the Fortran compiler used for the build, will be overwritten by <strong>--compiler</strong> command line option</p></li>
+<li><p><strong>FPM_FFLAGS</strong><br />
+sets the arguments for the Fortran compiler will be overwritten by <strong>--flag</strong> command line option</p></li>
+<li><p><strong>FPM_CC</strong><br />
+sets the path to the C compiler used for the build, will be overwritten by <strong>--c-compiler</strong> command line option</p></li>
+<li><p><strong>FPM_CFLAGS</strong><br />
+sets the arguments for the C compiler will be overwritten by <strong>--c-flag</strong> command line option</p></li>
+<li><p><strong>FPM_AR</strong><br />
+sets the path to the archiver used for the build, will be overwritten by <strong>--archiver</strong> command line option</p></li>
+<li><p><strong>FPM_LDFLAGS</strong><br />
+sets additional link arguments for creating executables will be overwritten by <strong>--link-flag</strong> command line option</p></li>
+</ul>
+<h2 id="examples"><strong>examples</strong></h2>
+<p>sample commands:</p>
+<pre><code>    fpm new mypackage --app --test
+    fpm build
+    fpm test
+    fpm run
+    fpm run --example
+    fpm new --help
+    fpm run myprogram --profile release -- -x 10 -y 20 --title &quot;my title&quot;
+    fpm install --prefix ~/.local
+</code></pre>
+<h2 id="see-also"><strong>see also</strong></h2>
+<ul>
+<li><p>The <strong>fpm</strong>(1) home page is at <a href="https://github.com/fortran-lang/fpm">https://github.com/fortran-lang/fpm</a></p></li>
+<li><p>Registered <strong>fpm</strong>(1) packages are at <a href="https://fortran-lang.org/packages">https://fortran-lang.org/packages</a></p></li>
+<li><p>The <strong>fpm</strong>(1) TOML file format is described at <a href="https://github.com/fortran-lang/fpm/blob/main/manifest-reference.md">https://github.com/fortran-lang/fpm/blob/main/manifest-reference.md</a></p></li>
+</ul>
 </div>
 <div id="new" class="slide section level1">
 <h1>new</h1>
+<h2 id="name-1"><strong>name</strong></h2>
+<p><strong>new</strong>(1) - the <strong>fpm</strong>(1) subcommand to initialize a new project</p>
+<h2 id="synopsis-1"><strong>synopsis</strong></h2>
+<p><strong>fpm</strong> <em>new</em> <em>NAME</em> [[-<strong>-lib</strong>|<strong>--src</strong>] [-<strong>-app</strong>] [-<strong>-test</strong>] [-<strong>-example</strong>]]| [-<strong>-full</strong>|<strong>--bare</strong>][-<strong>-backfill</strong>] <strong>fpm</strong> <em>new</em> <strong>--help</strong>|<strong>--version</strong></p>
+<h2 id="description-1"><strong>description</strong></h2>
+<p>&quot;<strong>fpm</strong> <em>new</em>&quot; creates and populates a <em>new</em> programming project directory. It</p>
+<ul>
+<li><p>creates a directory with the specified name</p></li>
+<li><p>runs the command &quot;git init&quot; in that directory</p></li>
+<li><p>populates the directory with the default project directories</p></li>
+<li><p>adds sample Fortran source files</p></li>
+</ul>
+<p>The default file structure (that will be automatically scanned) is</p>
+<pre><code>     NAME/
+       fpm.toml
+       src/
+           NAME.f90
+       app/
+           main.f90
+       test/
+           check.f90
+       example/
+           demo.f90
+</code></pre>
+<p>Using this file structure is highly encouraged, particularly for small packages primarily intended to be used as dependencies.</p>
+<p>If you find this restrictive and need to customize the package structure you will find using the <strong>--full</strong> switch creates a heavily annotated manifest file with references to documentation to aid in constructing complex package structures.</p>
+<p>Remember to update the information in the sample &quot;fpm.toml&quot; file with your name and e-mail address.</p>
+<h2 id="options"><strong>options</strong></h2>
+<ul>
+<li><em><strong>NAME</strong></em><br />
+the name of the project directory to create. The name must be made of up to 63 ASCII letters, digits, underscores, or hyphens, and start with a letter.</li>
+</ul>
+<p>The default is to create the src/, app/, and test/ directories. If any of the following options are specified then only the selected subdirectories are generated:</p>
+<ul>
+<li><p><strong><strong>--lib</strong>,**--src</strong>**<br />
+create directory src/ and a placeholder module named &quot;NAME.f90&quot; for use with subcommand &quot;build&quot;.</p></li>
+<li><p><strong><strong>--app</strong></strong><br />
+create directory app/ and a placeholder main program for use with subcommand &quot;run&quot;.</p></li>
+<li><p><strong><strong>--test</strong></strong><br />
+create directory test/ and a placeholder program for use with the subcommand &quot;test&quot;. Note that sans &quot;<strong>--lib</strong>&quot; it really does not have anything to test.</p></li>
+<li><p><strong><strong>--example</strong></strong><br />
+create directory example/ and a placeholder program for use with the subcommand &quot;run <strong>--example</strong>&quot;. It is only created by default if &quot;<strong>--full</strong> is&quot; specified.</p></li>
+</ul>
+<p>So the default is equivalent to</p>
+<pre><code>    fpm NAME --lib --app --test
+</code></pre>
+<ul>
+<li><p><strong><strong>--backfill</strong></strong><br />
+By default the directory must not exist. If this option is present the directory may pre-exist and only subdirectories and files that do not already exist will be created. For example, if you previously entered &quot;<strong>fpm</strong> <em>new</em> myname <strong>--lib</strong>&quot; entering &quot;<strong>fpm</strong> <em>new</em> myname <strong>-full</strong> <strong>--backfill</strong>&quot; will create any missing app/, example/, and test/ directories and programs.</p></li>
+<li><p><strong><strong>--full</strong></strong><br />
+By default a minimal manifest file (&quot;fpm.toml&quot;) is created that depends on auto-discovery. With this option a much more extensive manifest sample is written and the example/ directory is created and populated. It is designed to facilitate creating projects that depend extensively on non-default build options.</p></li>
+<li><p><strong><strong>--bare</strong></strong><br />
+A minimal manifest file (&quot;fpm.toml&quot;) is created and &quot;README.md&quot; file is created but no directories or sample Fortran are generated.</p></li>
+<li><p><strong><strong>--help</strong></strong><br />
+print this help and exit</p></li>
+<li><p><strong><strong>--version</strong></strong><br />
+print program version information and exit</p></li>
+</ul>
+<h2 id="examples-1"><strong>examples</strong></h2>
+<p>Sample use</p>
+<pre><code>   fpm new myproject  # create new project directory and seed it
+   cd myproject       # Enter the new directory
+   # and run commands such as
+   fpm build
+   fpm run            # run lone example application program
+   fpm test           # run example test program(s)
+   fpm run --example  # run lone example program
+
+   fpm new A --full # create example/ and an annotated fpm.toml as well
+   fpm new A --bare # create no directories
+   create any missing files in current directory
+   fpm new --full --backfill
+</code></pre>
 </div>
 <div id="build" class="slide section level1">
 <h1>build</h1>
+<h2 id="name-2"><strong>name</strong></h2>
+<p><strong>build</strong>(1) - the <strong>fpm</strong>(1) subcommand to build a project</p>
+<h2 id="synopsis-2"><strong>synopsis</strong></h2>
+<p><strong>fpm</strong> <em>build</em> [-<strong>-profile</strong> <em>PROF</em>] [-<strong>-flag</strong> <em>FFLAGS</em>] [-<strong>-compiler</strong> <em>COMPILER_NAME</em>] [-<strong>-list</strong>] [-<strong>-tests</strong>]</p>
+<p><strong>fpm</strong> <em>build</em> <strong>--help</strong>|<strong>--version</strong></p>
+<h2 id="description-2"><strong>description</strong></h2>
+<p>The &quot;<strong>fpm</strong> <em>build</em>&quot; command</p>
+<ul>
+<li><p>Fetches any dependencies</p></li>
+<li><p>Scans your sources</p></li>
+<li><p>Builds them in the proper order</p></li>
+</ul>
+<p>The Fortran source files are assumed by default to be in</p>
+<ul>
+<li><p>src/ for modules and procedure source</p></li>
+<li><p>app/ main <strong>program</strong>(s) for applications</p></li>
+<li><p>test/ main <strong>program</strong>(s) and support files for project tests</p></li>
+<li><p>example/ main <strong>program</strong>(s) for example programs Changed or new files found are rebuilt. The results are placed in the <em>build</em>/ directory.</p></li>
+</ul>
+<p>Non-default pathnames and remote dependencies are used if specified in the &quot;fpm.toml&quot; file.</p>
+<h2 id="options-1"><strong>options</strong></h2>
+<ul>
+<li><p><strong><strong>--profile</strong> <em>PROF</em></strong><br />
+selects the compilation profile for the <em>build</em>. Currently available profiles are &quot;release&quot; for high optimization and &quot;debug&quot; for full debug options. If <strong>--flag</strong> is not specified the &quot;debug&quot; flags are the default.</p></li>
+<li><p><strong><strong>--compiler</strong> NAME</strong><br />
+Specify a compiler name. The default is &quot;gfortran&quot; unless set by the environment variable FPM_FC.</p></li>
+<li><p><strong><strong>--c-compiler</strong> NAME</strong><br />
+Specify the C compiler name. Automatically determined by default unless set by the environment variable FPM_CC.</p></li>
+<li><p><strong><strong>--archiver</strong> NAME</strong><br />
+Specify the archiver name. Automatically determined by default unless set by the environment variable FPM_AR.</p></li>
+<li><p><strong><strong>--flag</strong></strong><br />
+<em>FFLAGS</em> selects compile arguments for the <em>build</em>, the default value is set by the FPM_FFLAGS environment variable. These are added to the profile options if <strong>--profile</strong> is specified, else these these options override the defaults. Note object and .mod directory locations are always built in.</p></li>
+<li><p><strong><strong>--c-flag</strong> CFLAGS</strong><br />
+selects compile arguments specific for C source in the <em>build</em>. The default value is set by the FPM_CFLAGS environment variable.</p></li>
+<li><p><strong><strong>--link-flag</strong> LDFLAGS</strong><br />
+select arguments passed to the linker for the <em>build</em>. The default value is set by the FPM_LDFLAGS environment variable.</p></li>
+<li><p><strong><strong>--list</strong></strong><br />
+list candidates instead of building or running them</p></li>
+<li><p><strong><strong>--tests</strong></strong><br />
+<em>build</em> all tests (otherwise only if needed)</p></li>
+<li><p><strong><strong>--show-model</strong></strong><br />
+show the model and exit (do not <em>build</em>)</p></li>
+<li><p><strong><strong>--help</strong></strong><br />
+print this help and exit</p></li>
+<li><p><strong><strong>--version</strong></strong><br />
+print program version information and exit</p></li>
+</ul>
+<h2 id="environment-variables-1"><strong>environment variables</strong></h2>
+<ul>
+<li><p><strong>FPM_FC</strong><br />
+sets the path to the Fortran compiler used for the <em>build</em>, will be overwritten by <strong>--compiler</strong> command line option</p></li>
+<li><p><strong>FPM_FFLAGS</strong><br />
+sets the arguments for the Fortran compiler will be overwritten by <strong>--flag</strong> command line option</p></li>
+<li><p><strong>FPM_CC</strong><br />
+sets the path to the C compiler used for the <em>build</em>, will be overwritten by <strong>--c-compiler</strong> command line option</p></li>
+<li><p><strong>FPM_CFLAGS</strong><br />
+sets the arguments for the C compiler will be overwritten by <strong>--c-flag</strong> command line option</p></li>
+<li><p><strong>FPM_AR</strong><br />
+sets the path to the archiver used for the <em>build</em>, will be overwritten by <strong>--archiver</strong> command line option</p></li>
+<li><p><strong>FPM_LDFLAGS</strong><br />
+sets additional link arguments for creating executables will be overwritten by <strong>--link-flag</strong> command line option</p></li>
+</ul>
+<h2 id="examples-2"><strong>examples</strong></h2>
+<p>Sample commands:</p>
+<pre><code>  fpm build                   # build with debug options
+  fpm build --profile release # build with high optimization
+</code></pre>
 </div>
 <div id="run" class="slide section level1">
 <h1>run</h1>
+<h2 id="name-3"><strong>name</strong></h2>
+<p><strong>run</strong>(1) - the <strong>fpm</strong>(1) subcommand to run project applications</p>
+<h2 id="synopsis-3"><strong>synopsis</strong></h2>
+<p>fpm run [[-<strong>-target</strong>] <strong>NAME</strong>(<em>s</em>) [-<strong>-profile</strong> PROF] [-<strong>-flag</strong> FFLAGS] [-<strong>-compiler</strong> COMPILER_NAME] [-<strong>-runner</strong> &quot;CMD&quot;] [-<strong>-example</strong>] [-<strong>-list</strong>] [-<strong>-all</strong>] [-- ARGS]</p>
+<p>fpm run <strong>--help</strong>|<strong>--version</strong></p>
+<h2 id="description-3"><strong>description</strong></h2>
+<p>Run the applications in your <strong>fpm</strong>(1) package. By default applications in /app or specified as &quot;executable&quot; in your &quot;fpm.toml&quot; manifest are used. Alternatively demonstration programs in example/ or specified in the &quot;example&quot; section in &quot;fpm.toml&quot; can be executed. The applications are automatically rebuilt before being run if they are out of date.</p>
+<h2 id="options-2"><strong>options</strong></h2>
+<ul>
+<li><p><strong><strong>--target</strong> <strong>NAME</strong>(<em>s</em>)</strong><br />
+list of application names to execute. No name is required if only one target exists. If no name is supplied and more than one candidate exists or a name has no match a list is produced and <strong>fpm</strong>(1) exits.</p>
+<p>Basic &quot;globbing&quot; is supported where &quot;?&quot; represents any single character and &quot;*&quot; represents any string. Note The glob string normally needs quoted to the special characters from shell expansion.</p></li>
+<li><p><strong><strong>--all</strong></strong><br />
+Run all examples or applications. An alias for <strong>--target</strong> &#39;*&#39;.</p></li>
+<li><p><strong><strong>--example</strong></strong><br />
+Run example programs instead of applications.</p></li>
+<li><p><strong><strong>--profile</strong> PROF</strong><br />
+selects the compilation profile for the build. Currently available profiles are &quot;release&quot; for high optimization and &quot;debug&quot; for full debug options. If <strong>--flag</strong> is not specified the &quot;debug&quot; flags are the default.</p></li>
+<li><p><strong><strong>--compiler</strong> NAME</strong><br />
+Specify a compiler name. The default is &quot;gfortran&quot; unless set by the environment variable FPM_FC.</p></li>
+<li><p><strong><strong>--c-compiler</strong> NAME</strong><br />
+Specify the C compiler name. Automatically determined by default unless set by the environment variable FPM_CC.</p></li>
+<li><p><strong><strong>--archiver</strong> NAME</strong><br />
+Specify the archiver name. Automatically determined by default unless set by the environment variable FPM_AR.</p></li>
+<li><p><strong><strong>--flag</strong></strong><br />
+FFLAGS selects compile arguments for the build, the default value is set by the FPM_FFLAGS environment variable. These are added to the profile options if <strong>--profile</strong> is specified, else these these options override the defaults. Note object and .mod directory locations are always built in.</p></li>
+<li><p><strong><strong>--c-flag</strong> CFLAGS</strong><br />
+selects compile arguments specific for C source in the build. The default value is set by the FPM_CFLAGS environment variable.</p></li>
+<li><p><strong><strong>--link-flag</strong> LDFLAGS</strong><br />
+select arguments passed to the linker for the build. The default value is set by the FPM_LDFLAGS environment variable.</p></li>
+<li><p><strong><strong>--runner</strong> CMD</strong><br />
+A command to prefix the program execution paths with. see &quot;fpm help runner&quot; for further details.</p></li>
+<li><p><strong><strong>--list</strong></strong><br />
+list basenames of candidates instead of running them. Note out-of-date candidates will still be rebuilt before being listed.</p></li>
+<li><p><strong>-- ARGS</strong><br />
+optional arguments to pass to the <strong>program</strong>(<em>s</em>). The same arguments are passed to all program names specified.</p></li>
+</ul>
+<h2 id="environment-variables-2"><strong>environment variables</strong></h2>
+<ul>
+<li><p><strong>FPM_FC</strong><br />
+sets the path to the Fortran compiler used for the build, will be overwritten by <strong>--compiler</strong> command line option</p></li>
+<li><p><strong>FPM_FFLAGS</strong><br />
+sets the arguments for the Fortran compiler will be overwritten by <strong>--flag</strong> command line option</p></li>
+<li><p><strong>FPM_CC</strong><br />
+sets the path to the C compiler used for the build, will be overwritten by <strong>--c-compiler</strong> command line option</p></li>
+<li><p><strong>FPM_CFLAGS</strong><br />
+sets the arguments for the C compiler will be overwritten by <strong>--c-flag</strong> command line option</p></li>
+<li><p><strong>FPM_AR</strong><br />
+sets the path to the archiver used for the build, will be overwritten by <strong>--archiver</strong> command line option</p></li>
+<li><p><strong>FPM_LDFLAGS</strong><br />
+sets additional link arguments for creating executables will be overwritten by <strong>--link-flag</strong> command line option</p></li>
+</ul>
+<h2 id="examples-3"><strong>examples</strong></h2>
+<p><strong>fpm</strong>(1) - run or display project applications:</p>
+<pre><code>  fpm run        # run a target when only one exists or list targets
+  fpm run --list # list basename of all targets, running nothing.
+  fpm run &quot;demo*&quot; --list # list target basenames starting with &quot;demo*&quot;.
+  fpm run &quot;psi*&quot; --runner # list target pathnames starting with &quot;psi*&quot;.
+  fpm run --all  # run all targets, no matter how many there are.
+
+  # run default program built or to be built with the compiler command
+  # &quot;f90&quot;. If more than one app exists a list displays and target names
+  # are required.
+  fpm run --compiler f90
+
+  # run example programs instead of the application programs.
+  fpm run --example &quot;*&quot;
+
+  # run a specific program and pass arguments to the command
+  fpm run myprog -- -x 10 -y 20 --title &quot;my title line&quot;
+
+  # run production version of two applications
+  fpm run --target prg1,prg2 --profile release
+
+  # install executables in directory (assuming install(1) exists)
+  fpm run --runner &#39;install -b -m 0711 -p -t /usr/local/bin&#39;
+</code></pre>
 </div>
 <div id="test" class="slide section level1">
 <h1>test</h1>
+<h2 id="name-4"><strong>name</strong></h2>
+<p><strong>test</strong>(1) - the <strong>fpm</strong>(1) subcommand to run project tests</p>
+<h2 id="synopsis-4"><strong>synopsis</strong></h2>
+<p>fpm test [[-<strong>-target</strong>] <strong>NAME</strong>(<em>s</em>)] [-<strong>-profile</strong> PROF] [-<strong>-flag</strong> FFLAGS] [-<strong>-compiler</strong> COMPILER_NAME ] [-<strong>-runner</strong> &quot;CMD&quot;] [-<strong>-list</strong>][-- ARGS]</p>
+<p>fpm test <strong>--help</strong>|<strong>--version</strong></p>
+<h2 id="description-4"><strong>description</strong></h2>
+<p>Run applications you have built to test your project.</p>
+<h2 id="options-3"><strong>options</strong></h2>
+<ul>
+<li><p><strong><strong>--target</strong> <strong>NAME</strong>(<em>s</em>)</strong><br />
+optional list of specific test names to execute. The default is to run all the tests in test/ or the tests listed in the &quot;fpm.toml&quot; file.</p>
+<p>Basic &quot;globbing&quot; is supported where &quot;?&quot; represents any single character and &quot;*&quot; represents any string. Note The glob string normally needs quoted to protect the special characters from shell expansion.</p></li>
+<li><p><strong><strong>--profile</strong> PROF</strong><br />
+selects the compilation profile for the build. Currently available profiles are &quot;release&quot; for high optimization and &quot;debug&quot; for full debug options. If <strong>--flag</strong> is not specified the &quot;debug&quot; flags are the default.</p></li>
+<li><p><strong><strong>--compiler</strong> NAME</strong><br />
+Specify a compiler name. The default is &quot;gfortran&quot; unless set by the environment variable FPM_FC.</p></li>
+<li><p><strong><strong>--c-compiler</strong> NAME</strong><br />
+Specify the C compiler name. Automatically determined by default unless set by the environment variable FPM_CC.</p></li>
+<li><p><strong><strong>--archiver</strong> NAME</strong><br />
+Specify the archiver name. Automatically determined by default unless set by the environment variable FPM_AR.</p></li>
+<li><p><strong><strong>--flag</strong></strong><br />
+FFLAGS selects compile arguments for the build, the default value is set by the FPM_FFLAGS environment variable. These are added to the profile options if <strong>--profile</strong> is specified, else these these options override the defaults. Note object and .mod directory locations are always built in.</p></li>
+<li><p><strong><strong>--c-flag</strong> CFLAGS</strong><br />
+selects compile arguments specific for C source in the build. The default value is set by the FPM_CFLAGS environment variable.</p></li>
+<li><p><strong><strong>--link-flag</strong> LDFLAGS</strong><br />
+select arguments passed to the linker for the build. The default value is set by the FPM_LDFLAGS environment variable.</p></li>
+<li><p><strong><strong>--runner</strong> CMD</strong><br />
+A command to prefix the program execution paths with. see &quot;fpm help runner&quot; for further details.</p></li>
+<li><p><strong><strong>--list</strong></strong><br />
+list candidate basenames instead of running them. Note they</p></li>
+<li><p><strong><strong>--list</strong></strong><br />
+will still be built if not currently up to date.</p></li>
+<li><p><strong>-- ARGS</strong><br />
+optional arguments to pass to the test <strong>program</strong>(<em>s</em>). The same arguments are passed to all test names specified.</p></li>
+</ul>
+<h2 id="environment-variables-3"><strong>environment variables</strong></h2>
+<ul>
+<li><p><strong>FPM_FC</strong><br />
+sets the path to the Fortran compiler used for the build, will be overwritten by <strong>--compiler</strong> command line option</p></li>
+<li><p><strong>FPM_FFLAGS</strong><br />
+sets the arguments for the Fortran compiler will be overwritten by <strong>--flag</strong> command line option</p></li>
+<li><p><strong>FPM_CC</strong><br />
+sets the path to the C compiler used for the build, will be overwritten by <strong>--c-compiler</strong> command line option</p></li>
+<li><p><strong>FPM_CFLAGS</strong><br />
+sets the arguments for the C compiler will be overwritten by <strong>--c-flag</strong> command line option</p></li>
+<li><p><strong>FPM_AR</strong><br />
+sets the path to the archiver used for the build, will be overwritten by <strong>--archiver</strong> command line option</p></li>
+<li><p><strong>FPM_LDFLAGS</strong><br />
+sets additional link arguments for creating executables will be overwritten by <strong>--link-flag</strong> command line option</p></li>
+</ul>
+<h2 id="examples-4"><strong>examples</strong></h2>
+<p>run tests</p>
+<pre><code> # run default tests in /test or as specified in &quot;fpm.toml&quot;
+ fpm test
+
+ # run using compiler command &quot;f90&quot;
+ fpm test --compiler f90
+
+ # run a specific test and pass arguments to the command
+ fpm test mytest -- -x 10 -y 20 --title &quot;my title line&quot;
+
+ fpm test tst1 tst2 --profile PROF  # run production version of two tests
+</code></pre>
 </div>
 <div id="runner" class="slide section level1">
 <h1>runner</h1>
+<h2 id="name-5"><strong>name</strong></h2>
+<p><strong>--runner</strong>(1) - a shared option for specifying an application to launch executables.</p>
+<h2 id="synopsis-5"><strong>synopsis</strong></h2>
+<p><strong>fpm</strong> run|test <strong>--runner</strong> <em>CMD</em> ``` -- <em>SUFFIX_OPTIONS</em></p>
+<h2 id="description-5"><strong>description</strong></h2>
+<p>The <strong>--runner</strong> option allows specifying a program to launch executables selected via the <strong>fpm</strong>(1) subcommands &quot;run&quot; and &quot;test&quot;. This gives easy recourse to utilities such as debuggers and other tools that wrap other executables.</p>
+<p>These external commands are not part of <strong>fpm</strong>(1) itself as they vary from platform to platform or require independent installation.</p>
+<h2 id="option"><strong>option</strong></h2>
+<ul>
+<li><p><strong><strong>--runner</strong> &#39;<em>CMD</em>&#39;</strong><br />
+quoted command used to launch the <strong>fpm</strong>(1) executables. Available for both the &quot;run&quot; and &quot;test&quot; subcommands. If the keyword is specified without a value the default command is &quot;echo&quot;.</p></li>
+<li><p><strong>-- <em>SUFFIX_OPTIONS</em></strong><br />
+additional options to suffix the command <em>CMD</em> and executable file names with.</p></li>
+</ul>
+<h2 id="examples-5"><strong>examples</strong></h2>
+<p>Use cases for &#39;<strong>fpm</strong> run|test <strong>--runner</strong> &quot;<em>CMD</em>&quot;&#39; include employing the following common GNU/Linux and Unix commands:</p>
+<h2 id="interrogate">INTERROGATE</h2>
+<ul>
+<li><p>nm - list symbols from object files</p></li>
+<li><p>size - list section sizes and total size.</p></li>
+<li><p>ldd - print shared object dependencies</p></li>
+<li><p>ls - list directory contents</p></li>
+<li><p>stat - display file or file system status</p></li>
+<li><p>file - determine file type</p></li>
+</ul>
+<h2 id="performance-and-debugging">PERFORMANCE AND DEBUGGING</h2>
+<ul>
+<li><p>gdb - The GNU Debugger</p></li>
+<li><p>valgrind - a suite of tools for debugging and profiling</p></li>
+<li><p>time - time a simple command or give resource usage</p></li>
+<li><p>timeout - run a command with a time limit</p></li>
+</ul>
+<h2 id="copy">COPY</h2>
+<ul>
+<li><p>install - copy files and set attributes</p></li>
+<li><p>tar - an archiving utility</p></li>
+</ul>
+<h2 id="alter">ALTER</h2>
+<ul>
+<li><p>rm - remove files or directories</p></li>
+<li><p>chmod - change permissions of a file</p></li>
+<li><p>strip - remove unnecessary information from strippable files</p></li>
+</ul>
+<p>For example</p>
+<pre><code>  fpm test --runner gdb
+  fpm run --runner &quot;tar cvfz $HOME/bundle.tgz&quot;
+  fpm run --runner ldd
+  fpm run --runner strip
+  fpm run --runner &#39;cp -t /usr/local/bin&#39;
+
+  # options after executable name can be specified after the -- option
+  fpm --runner cp run -- /usr/local/bin/
+  # generates commands of the form &quot;cp $FILENAME /usr/local/bin/&quot;
+
+  # bash(1) alias example:
+  alias fpm-install=\
+  &quot;fpm run --profile release --runner &#39;install -vbp -m 0711 -t ~/.local/bin&#39;&quot;
+  fpm-install
+</code></pre>
 </div>
 <div id="install" class="slide section level1">
 <h1>install</h1>
+<h2 id="name-6"><strong>name</strong></h2>
+<p><strong>install</strong>(1) - install fpm projects</p>
+<h2 id="synopsis-6"><strong>synopsis</strong></h2>
+<p><strong>fpm</strong> <em>install</em> [-<strong>-profile</strong> <em>PROF</em>] [-<strong>-flag</strong> <em>FFLAGS</em>] [-<strong>-list</strong>] [-<strong>-no-rebuild</strong>] [-<strong>-prefix</strong> <em>DIR</em>] [-<strong>-bindir</strong> <em>DIR</em>] [-<strong>-libdir</strong> <em>DIR</em>] [-<strong>-includedir</strong> <em>DIR</em>] [-<strong>-verbose</strong>]</p>
+<h2 id="description-6"><strong>description</strong></h2>
+<p>Subcommand to <em>install</em> <strong>fpm</strong> projects. Running <em>install</em> will export the current project to the selected prefix, this will by default <em>install</em> all executables (tests and examples are excluded) which are part of the projects. Libraries and module files are only installed for projects requiring the installation of those components in the package manifest.</p>
+<h2 id="options-4"><strong>options</strong></h2>
+<ul>
+<li><p><strong><strong>--list</strong></strong><br />
+list all installable targets for this project, but do not <em>install</em> any of them</p></li>
+<li><p><strong><strong>--profile</strong> <em>PROF</em></strong><br />
+selects the compilation profile for the build. Currently available profiles are &quot;release&quot; for high optimization and &quot;debug&quot; for full debug options. If <strong>--flag</strong> is not specified the &quot;debug&quot; flags are the default.</p></li>
+<li><p><strong><strong>--flag</strong></strong><br />
+<em>FFLAGS</em> selects compile arguments for the build, the default value is set by the FPM_FFLAGS environment variable. These are added to the profile options if <strong>--profile</strong> is specified, else these these options override the defaults. Note object and .mod directory locations are always built in.</p></li>
+<li><p><strong><strong>--c-flag</strong> CFLAGS</strong><br />
+selects compile arguments specific for C source in the build. The default value is set by the FPM_CFLAGS environment variable.</p></li>
+<li><p><strong><strong>--link-flag</strong> LDFLAGS</strong><br />
+select arguments passed to the linker for the build. The default value is set by the FPM_LDFLAGS environment variable.</p></li>
+<li><p><strong><strong>--no-rebuild</strong></strong><br />
+do not rebuild project before installation</p></li>
+<li><p><strong><strong>--prefix</strong> <em>DIR</em></strong><br />
+path to installation directory (requires write access), the default prefix on Unix systems is $HOME/.local and %APPDATA%\local on Windows</p></li>
+<li><p><strong><strong>--bindir</strong> <em>DIR</em></strong><br />
+subdirectory to place executables in (default: bin)</p></li>
+<li><p><strong><strong>--libdir</strong> <em>DIR</em></strong><br />
+subdirectory to place libraries and archives in (default: lib)</p></li>
+<li><p><strong><strong>--includedir</strong> <em>DIR</em></strong><br />
+subdirectory to place headers and module files in (default: include)</p></li>
+<li><p><strong><strong>--verbose</strong></strong><br />
+print more information</p></li>
+</ul>
+<h2 id="environment-variables-4"><strong>environment variables</strong></h2>
+<ul>
+<li><p><strong>FPM_FC</strong><br />
+sets the path to the Fortran compiler used for the build, will be overwritten by <strong>--compiler</strong> command line option</p></li>
+<li><p><strong>FPM_FFLAGS</strong><br />
+sets the arguments for the Fortran compiler will be overwritten by <strong>--flag</strong> command line option</p></li>
+<li><p><strong>FPM_CC</strong><br />
+sets the path to the C compiler used for the build, will be overwritten by <strong>--c-compiler</strong> command line option</p></li>
+<li><p><strong>FPM_CFLAGS</strong><br />
+sets the arguments for the C compiler will be overwritten by <strong>--c-flag</strong> command line option</p></li>
+<li><p><strong>FPM_AR</strong><br />
+sets the path to the archiver used for the build, will be overwritten by <strong>--archiver</strong> command line option</p></li>
+<li><p><strong>FPM_LDFLAGS</strong><br />
+sets additional link arguments for creating executables will be overwritten by <strong>--link-flag</strong> command line option</p></li>
+</ul>
+<h2 id="examples-6"><strong>examples</strong></h2>
+<ol>
+<li>Install release version of project:</li>
+</ol>
+<!-- end list -->
+
+<pre><code>    fpm install --profile release
+</code></pre>
+<ol start="2">
+<li>Install the project without rebuilding the executables:</li>
+</ol>
+<!-- end list -->
+
+<pre><code>    fpm install --no-rebuild
+</code></pre>
+<ol start="3">
+<li>Install executables to a custom prefix into the exe directory:</li>
+</ol>
+<!-- end list -->
+
+<pre><code>    fpm install --prefix $PWD --bindir exe
+</code></pre>
 </div>
 <div id="update" class="slide section level1">
 <h1>update</h1>
+<h2 id="name-7"><strong>name</strong></h2>
+<p><strong>update</strong>(1) - manage project dependencies</p>
+<h2 id="synopsis-7"><strong>synopsis</strong></h2>
+<p>fpm update [-<strong>-fetch-only</strong>] [-<strong>-clean</strong>] [-<strong>-verbose</strong>] <strong>[NAME</strong>(<em>s</em>)]</p>
+<h2 id="description-7"><strong>description</strong></h2>
+<p>Manage and update project dependencies. If no dependency names are provided all the dependencies are updated automatically.</p>
+<h2 id="options-5"><strong>options</strong></h2>
+<ul>
+<li><p><strong><strong>--fetch-only</strong></strong><br />
+Only fetch dependencies, do not update existing projects</p></li>
+<li><p><strong><strong>--clean</strong></strong><br />
+Do not use previous dependency cache</p></li>
+<li><p><strong><strong>--verbose</strong></strong><br />
+Show additional printout</p></li>
+</ul>
+<h2 id="see-also-1"><strong>see also</strong></h2>
+<p>The <strong>fpm</strong>(1) home page at <a href="https://github.com/fortran-lang/fpm">https://github.com/fortran-lang/fpm</a></p>
 </div>
 <div id="list" class="slide section level1">
 <h1>list</h1>
+<h2 id="name-8"><strong>name</strong></h2>
+<p><strong>list</strong>(1) - list summary of <strong>fpm</strong>(1) subcommands</p>
+<h2 id="synopsis-8"><strong>synopsis</strong></h2>
+<p><strong>fpm</strong> <em>list</em> [-<em>list</em>]</p>
+<p><strong>fpm</strong> <em>list</em> <strong>--help</strong>|<strong>--version</strong></p>
+<h2 id="description-8"><strong>description</strong></h2>
+<p>Display a short description for each <strong>fpm</strong>(1) subcommand.</p>
+<h2 id="options-6"><strong>options</strong></h2>
+<ul>
+<li><strong>--<em>list</em></strong><br />
+display a <em>list</em> of command options as well. This is the same output as generated by &quot;<strong>fpm</strong> --<em>list</em>&quot;.</li>
+</ul>
+<h2 id="examples-7"><strong>examples</strong></h2>
+<p>display a short <em>list</em> of <strong>fpm</strong>(1) subcommands</p>
+<pre><code>  fpm list
+  fpm --list
+</code></pre>
 </div>
 <div id="help" class="slide section level1">
 <h1>help</h1>
+<h2 id="name-9"><strong>name</strong></h2>
+<p><strong>help</strong>(1) - the <strong>fpm</strong>(1) subcommand to display help</p>
+<h2 id="synopsis-9"><strong>synopsis</strong></h2>
+<p><em>fpm</em> <em>help</em> [fpm] [new] [build] [run] [test] [help] [version] [manual] [runner]</p>
+<h2 id="description-9"><strong>description</strong></h2>
+<p>The &quot;<em>fpm</em> <em>help</em>&quot; command is an alternative to the --<em>help</em> parameter on the <em>fpm</em>(1) command and its subcommands.</p>
+<h2 id="options-7"><strong>options</strong></h2>
+<ul>
+<li><p><strong><strong>NAME</strong>(s)</strong><br />
+A list of topic names to display. All the subcommands have their own page (<em>new</em>, <em>build</em>, <em>run</em>, <em>test</em>, ```).</p>
+<p>The special name &quot;<em>manual</em>&quot; displays all the <em>fpm</em>(1) built-in documentation.</p>
+<p>The default is to display <em>help</em> for the <em>fpm</em>(1) command itself.</p></li>
+</ul>
+<h2 id="examples-8"><strong>examples</strong></h2>
+<p>Sample usage:</p>
+<pre><code>     fpm help           # general fpm(1) command help
+     fpm help version   # show program version
+     fpm help new       # display help for &quot;new&quot; subcommand
+     fpm help manual    # All fpm(1) built-in documentation
+
+</code></pre>
 </div>
 <div id="version" class="slide section level1">
 <h1>version</h1>
+<ul>
+<li><p><strong>Version:</strong><br />
+0.5.0, alpha</p></li>
+<li><p><strong>Program:</strong><br />
+<strong>fpm</strong>(1) Description: A Fortran package manager and build system</p></li>
+<li><p><strong>Home Page:</strong><br />
+<a href="https://github.com/fortran-lang/fpm">https://github.com/fortran-lang/fpm</a></p></li>
+<li><p><strong>License:</strong><br />
+MIT</p></li>
+<li><p><strong>OS Type:</strong><br />
+Linux</p></li>
+</ul>
 </div>
 </body>
 </html>

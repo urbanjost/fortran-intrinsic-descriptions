@@ -2,14 +2,15 @@
 (
 ################################################################################
 # setup
+
+# need fpm(1)
+export FPMPATH="$(dirname $(which fpm) )"
+
 export PATH=/usr/bin:/bin
 HERE=$(realpath $(dirname $0))
 BASE=$(dirname $HERE)
 export INTRINSICS=$BASE/intrinsics
 export MANPATH=$BASE/man
-
-# also need fpm(1)
-export FPMPATH="$(dirname $(which fpm) )"
 
 DOCS=$BASE/docs
 MANDIR=$BASE/man
@@ -19,14 +20,15 @@ cd $BASE
 export PATH="$HERE:$PATH"
 export PATH="$BASE/bin:$PATH"
 export PATH="$PATH:$FPMPATH"
+echo $PATH|xargs -n 1 -d:
 ################################################################################
 # PURGE
 cd $BASE ||exit
-rm -frv man expected example
-rm -fv src/M_intrinsics.f90
-rm -fv docs/*
-rm -fv bin/fman
-rm -rfv build
+rm  -frv  man expected example
+rm  -fv   src/M_intrinsics.f90
+rm  -fv   docs/*
+rm  -fv   bin/fman
+rm  -rfv  build
 
 mkdir -p $DOCS
 mkdir -p $BASE/docs $BASE/example

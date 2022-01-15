@@ -10,3 +10,119 @@
 .ta T 0.2i
 .nr IN 0.2i
 ." -----------------------------------------------------------------
+.SH NAME
+\fBtest\fP(1) - the \fBfpm\fP(1) subcommand to run project tests
+
+.SH SYNOPSIS
+fpm test [[-\fB-target\fP] \fBNAME\fP(\fIs\fP)] [-\fB-profile\fP PROF] [-\fB-flag\fP FFLAGS]
+[-\fB-compiler\fP COMPILER_NAME ] [-\fB-runner\fP "CMD"] [-\fB-list\fP][-- ARGS]
+.PP
+fpm test \fB--help\fP|\fB--version\fP
+.fam T
+.fi
+.SH DESCRIPTION
+Run applications you have built to test your project.
+.SH OPTIONS
+.TP
+.B \fB--target\fP \fBNAME\fP(\fIs\fP)
+optional list of specific test names to execute.
+The default is to run all the tests in test/
+or the tests listed in the "fpm.toml" file.
+.RS
+.PP
+Basic "globbing" is supported where "?" represents
+any single character and "*" represents any string.
+Note The glob string normally needs quoted to
+protect the special characters from shell expansion.
+.RE
+.TP
+.B \fB--profile\fP PROF
+selects the compilation profile for the build.
+Currently available profiles are "release" for
+high optimization and "debug" for full debug options.
+If \fB--flag\fP is not specified the "debug" flags are the
+default.
+.TP
+.B \fB--compiler\fP NAME
+Specify a compiler name. The default is "gfortran"
+unless set by the environment variable FPM_FC.
+.TP
+.B \fB--c-compiler\fP NAME
+Specify the C compiler name. Automatically determined by
+default unless set by the environment variable FPM_CC.
+.TP
+.B \fB--archiver\fP NAME
+Specify the archiver name. Automatically determined by
+default unless set by the environment variable FPM_AR.
+.TP
+.B \fB--flag\fP
+FFLAGS    selects compile arguments for the build, the default value is
+set by the FPM_FFLAGS environment variable. These are added
+to the profile options if \fB--profile\fP is specified, else these
+these options override the defaults. Note object and .mod
+directory locations are always built in.
+.TP
+.B \fB--c-flag\fP CFLAGS
+selects compile arguments specific for C source in the build.
+The default value is set by the FPM_CFLAGS environment
+variable.
+.TP
+.B \fB--link-flag\fP LDFLAGS
+select arguments passed to the linker for the build. The
+default value is set by the FPM_LDFLAGS environment variable.
+.TP
+.B \fB--runner\fP CMD
+A command to prefix the program execution paths with.
+see "fpm help runner" for further details.
+.TP
+.B \fB--list\fP
+list candidate basenames instead of running them. Note they
+.TP
+.B \fB--list\fP
+will still be built if not currently up to date.
+.TP
+.B -- ARGS
+optional arguments to pass to the test \fBprogram\fP(\fIs\fP).
+The same arguments are passed to all test names
+specified.
+.SH ENVIRONMENT VARIABLES
+.TP
+.B FPM_FC
+sets the path to the Fortran compiler used for the build,
+will be overwritten by \fB--compiler\fP command line option
+.TP
+.B FPM_FFLAGS
+sets the arguments for the Fortran compiler
+will be overwritten by \fB--flag\fP command line option
+.TP
+.B FPM_CC
+sets the path to the C compiler used for the build,
+will be overwritten by \fB--c-compiler\fP command line option
+.TP
+.B FPM_CFLAGS
+sets the arguments for the C compiler
+will be overwritten by \fB--c-flag\fP command line option
+.TP
+.B FPM_AR
+sets the path to the archiver used for the build,
+will be overwritten by \fB--archiver\fP command line option
+.TP
+.B FPM_LDFLAGS
+sets additional link arguments for creating executables
+will be overwritten by \fB--link-flag\fP command line option
+.SH EXAMPLES
+run tests
+.PP
+.nf
+.fam C
+ # run default tests in /test or as specified in "fpm.toml"
+ fpm test
+
+ # run using compiler command "f90"
+ fpm test --compiler f90
+
+ # run a specific test and pass arguments to the command
+ fpm test mytest -- -x 10 -y 20 --title "my title line"
+
+ fpm test tst1 tst2 --profile PROF  # run production version of two tests
+
