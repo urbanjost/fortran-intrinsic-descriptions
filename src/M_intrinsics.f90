@@ -5264,7 +5264,7 @@ textblock=[character(len=256) :: &
 '', &
 'Sample program:', &
 '', &
-'    program demo_time_and_date', &
+'    program demo_date_and_time', &
 '    implicit none', &
 '    character(len=8)     :: date', &
 '    character(len=10)    :: time', &
@@ -5287,7 +5287,7 @@ textblock=[character(len=256) :: &
 '         & values(6),'' - The minutes of the hour'', &', &
 '         & values(7),'' - The seconds of the minute'', &', &
 '         & values(8),'' - The milliseconds of the second''', &
-'    end program demo_time_and_date', &
+'    end program demo_date_and_time', &
 '', &
 'Results:', &
 '', &
@@ -6443,7 +6443,7 @@ textblock=[character(len=256) :: &
 '       write(*,*)''is the same as'',exp(re)*cmplx(cos(im),sin(im),kind=kind(cx))', &
 '', &
 '       ! exp(3) is the inverse function of log(3) so', &
-'       ! the real compoenent of the input must be less than or equal to', &
+'       ! the real component of the input must be less than or equal to', &
 '       write(*,*)''maximum real component'',log(huge(0.0))', &
 '       ! or for double precision', &
 '       write(*,*)''maximum doubleprecision component'',log(huge(0.0d0))', &
@@ -11388,7 +11388,7 @@ textblock=[character(len=256) :: &
 '       & merge_bits(o''12345''   , 32767_int16, b''0000000000010101''), &', &
 '       & merge_bits(32767_int16,    o''12345'',             z''1234'')', &
 '', &
-'       ! a do-it-yourself equivalent for comparision and validation', &
+'       ! a do-it-yourself equivalent for comparison and validation', &
 '       print fmt, &', &
 '       & ior(iand(32767_int16, 32767_int16),                   &', &
 '       &   iand(o''12345'', not(32767_int16))),                  &', &
@@ -13753,7 +13753,7 @@ textblock=[character(len=256) :: &
 '          integer :: range', &
 '          type(TYPE,kind=KIND),intent(in) :: x', &
 '', &
-'where TYPE is _real_ or _cmplpex_ and KIND is any kind supported by', &
+'where TYPE is _real_ or _complex_ and KIND is any kind supported by', &
 'TYPE.', &
 '', &
 'DESCRIPTION', &
@@ -14883,10 +14883,10 @@ textblock=[character(len=256) :: &
 'The kind of the return value is the magnitude of A with the sign of B.', &
 'That is,', &
 '', &
-'     -  If __b \>= 0__ then the result is __abs(a)__', &
-'     -  else if __b < 0__ it is -__abs(a)__.', &
-'     - if __b__ is _real_ and the processor distinguishes between __-0.0__ and __0.0__ then the', &
-'       result is __-abs(a)__', &
+'-   If B >= 0 then the result is ABS(A)', &
+'-   else if B < 0 it is -ABS(A).', &
+'-   if B is _real_ and the processor distinguishes between -0.0 and 0.0', &
+'    then the result is -ABS(A)', &
 '', &
 'EXAMPLES', &
 '', &
@@ -14894,13 +14894,13 @@ textblock=[character(len=256) :: &
 '', &
 '    program demo_sign', &
 '    implicit none', &
-'       print *,  sign( -12,  1 )', &
-'       print *,  sign( -12,  0 )', &
-'       print *,  sign( -12, -1 )', &
+'       print *, sign( -12,  1 )', &
+'       print *, sign( -12,  0 )', &
+'       print *, sign( -12, -1 )', &
 '', &
-'       print *,  sign( -12.0, [1.0, 0.0, -1.0] )', &
+'       print *, sign( -12.0, [1.0, 0.0, -1.0] )', &
 '', &
-'       print *,  ''can I distinguise 0 from -0? '', sign( 1.0, -0.0 ) .ne. sign( 1.0, 0.0 )', &
+'       print *,''can I distinguish 0 from -0? '',sign(1.0,-0.0).ne.sign(1.0, 0.0)', &
 '    end program demo_sign', &
 '', &
 'Results:', &

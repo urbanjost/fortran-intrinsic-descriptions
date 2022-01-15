@@ -4769,7 +4769,7 @@ Unavailable time and date _character_ parameters return blanks.
 Sample program:
 
 ```fortran
-program demo_time_and_date
+program demo_date_and_time
 implicit none
 character(len=8)     :: date
 character(len=10)    :: time
@@ -4792,7 +4792,7 @@ integer,dimension(8) :: values
      & values(6),' - The minutes of the hour', &
      & values(7),' - The seconds of the minute', &
      & values(8),' - The milliseconds of the second'
-end program demo_time_and_date
+end program demo_date_and_time
 ```
 Results:
 ```
@@ -5866,7 +5866,7 @@ complex :: cx
    write(*,*)'is the same as',exp(re)*cmplx(cos(im),sin(im),kind=kind(cx))
 
    ! exp(3) is the inverse function of log(3) so
-   ! the real compoenent of the input must be less than or equal to
+   ! the real component of the input must be less than or equal to
    write(*,*)'maximum real component',log(huge(0.0))
    ! or for double precision
    write(*,*)'maximum doubleprecision component',log(huge(0.0d0))
@@ -10115,7 +10115,7 @@ character(len=*),parameter :: fmt='(*(g0, 1X))'
    & merge_bits(o'12345'   , 32767_int16, b'0000000000010101'), &
    & merge_bits(32767_int16,    o'12345',             z'1234')
 
-   ! a do-it-yourself equivalent for comparision and validation
+   ! a do-it-yourself equivalent for comparison and validation
    print fmt, &
    & ior(iand(32767_int16, 32767_int16),                   &
    &   iand(o'12345', not(32767_int16))),                  &
@@ -12523,7 +12523,7 @@ result = range(x)
       integer :: range
       type(TYPE,kind=KIND),intent(in) :: x
 ```
-   where TYPE is _real_ or _cmplpex_ and KIND is any kind supported by
+   where TYPE is _real_ or _complex_ and KIND is any kind supported by
    TYPE.
 ## __Description__
 
@@ -13564,15 +13564,17 @@ result = sign(a, b)
     type(TYPE(kind=KIND))            :: sign
     type(TYPE(kind=KIND)),intent(in) :: a, b
 ```
-where TYPE may be _real_ or _integer_ and KIND is any supported kind for the type.
+where TYPE may be _real_ or _integer_ and KIND is any supported kind
+for the type.
 ```
 ## __Description__
 
 __sign__(a,b) returns the value of __a__ with the sign of __b__.
 
-For processors that distinguish between positive and negative zeros  __sign()__ may be used to
-distinguish between __real__ values 0.0 and −0.0. SIGN (1.0, -0.0) will
-return −1.0 when a negative zero is distinguishable.
+For processors that distinguish between positive and negative zeros
+__sign()__ may be used to distinguish between __real__ values 0.0 and
+−0.0. SIGN (1.0, -0.0) will return −1.0 when a negative zero is
+distinguishable.
 
     29  1 Description. Magnitude of A with the sign of B.
 
@@ -13586,12 +13588,13 @@ return −1.0 when a negative zero is distinguishable.
 
 ## __Returns__
 
-The kind of the return value is the magnitude of __a__ with the sign of  __b__. That is,
+The kind of the return value is the magnitude of __a__ with the sign of
+__b__. That is,
 
-     -  If __b \>= 0__ then the result is __abs(a)__
-     -  else if __b < 0__ it is -__abs(a)__.
-     - if __b__ is _real_ and the processor distinguishes between __-0.0__ and __0.0__ then the
-       result is __-abs(a)__
+   - If __b \>= 0__ then the result is __abs(a)__
+   - else if __b < 0__ it is -__abs(a)__.
+   - if __b__ is _real_ and the processor distinguishes between __-0.0__
+     and __0.0__ then the result is __-abs(a)__
 
 ## __Examples__
 
@@ -13600,13 +13603,13 @@ Sample program:
 ```fortran
 program demo_sign
 implicit none
-   print *,  sign( -12,  1 )
-   print *,  sign( -12,  0 )
-   print *,  sign( -12, -1 )
+   print *, sign( -12,  1 )
+   print *, sign( -12,  0 )
+   print *, sign( -12, -1 )
 
-   print *,  sign( -12.0, [1.0, 0.0, -1.0] )
+   print *, sign( -12.0, [1.0, 0.0, -1.0] )
 
-   print *,  'can I distinguise 0 from -0? ', sign( 1.0, -0.0 ) .ne. sign( 1.0, 0.0 )
+   print *,'can I distinguish 0 from -0? ',sign(1.0,-0.0).ne.sign(1.0, 0.0)
 end program demo_sign
 ```
 Results:
