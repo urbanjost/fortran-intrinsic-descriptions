@@ -1,5 +1,7 @@
 #!/bin/bash
-
+(
+################################################################################
+# setup
 export PATH=/usr/bin:/bin
 HERE=$(realpath $(dirname $0))
 BASE=$(dirname $HERE)
@@ -8,48 +10,26 @@ export PATH="$BASE/bin:$PATH"
 export INTRINSICS=$BASE/intrinsics
 export MANPATH=$BASE/man
 
-git checkout gh-pages
-# update gh-pages with anything from main
-git merge origin/main
-git push origin gh-pages
-BRANCH=$( git rev-parse --abbrev-ref HEAD )
-[ "$BRANCH" != gh-pages ] && exit
-#################################################
-PROBLEMS(){
-# some expected problems for now
-cd $BASE ||exit
-mkdir -p expected
-mv example/c_f_pointer.f90 example/c_f_procpointer.f90 example/c_funloc.f90 expected
-}
-#################################################
-PURGE(){
+# also need fpm(1)
+export FPMPATH="$(dirname $(which fpm) )"
+export PATH="$PATH:$FPMPATH"
+
+cd $BASE
+################################################################################
+# PURGE
 cd $BASE ||exit
 rm -frv man expected example
 rm -fv src/M_intrinsics.f90
 rm -fv docs/*
 rm -fv bin/fman
 rm -rfv build
-}
-#################################################
-export FPMPATH="$(dirname $(which fpm) )"
-
-# also need fpm
-export PATH="$PATH:$FPMPATH"
-
-cd $BASE
-#cp $BASE/intrinsics/*.md $HOME/github/FORK/fortran-lang.org/learn/intrinsics/
-(
-exec 2>&1
-
-PURGE
 
 mkdir -p $BASE/man/man1 $BASE/docs $BASE/example
 mkdir -p $BASE/man/man3  $BASE/man/cat3
-
-##################################################
+################################################################################
+# FUNCTIONS
+################################################################################
 # rebuild man-pages and M_intrinsics.f90
-#@(#) use pandoc(1) to create man-pages.
-###############################################################################
 header(){
 cat <<EOF
 ." Text automatically generated
@@ -66,7 +46,16 @@ cat <<EOF
 ." -----------------------------------------------------------------
 EOF
 }
-###############################################################################
+################################################################################
+TOCHARACTER(){
+:
+cat $NAME |
+   sed -e "s/'/''/g" |
+   sed -e "s/^/'/" |
+   sed -e 's/$/'"'"', \&/'|
+cat
+}
+################################################################################
 cd $INTRINSICS
 mkdir -p $BASE/man/man3 $BASE/man/cat3
 for NAME in *.md
@@ -119,56 +108,44 @@ cd $BASE
 tar cvfz docs/fortran.tgz man
 ################################################################################
 export NAME
-###########################
-TOCHARACTER(){
-:
-cat $NAME |
-   sed -e "s/'/''/g" |
-   sed -e "s/^/'/" |
-   sed -e 's/$/'"'"', \&/'|
-cat
-}
-###########################
-(
+
 cd $BASE/man/cat3
 ls *.3fortran|while read NAME
 do
-SHORTNAME=${NAME/.*}
-(
-cat <<EOF
-function help_${SHORTNAME}(prefix,topic,m_help) result (textblock)
-character(len=256),allocatable   :: textblock(:)
-logical,intent(in),optional      :: prefix
-logical,intent(in),optional      :: topic
-logical,intent(in),optional      :: m_help
-character(len=*),parameter       :: shortname="$SHORTNAME"
-character(len=:),allocatable,intent(out),optional :: name
-textblock=[character(len=256)    :: &
-'', &
-$(TOCHARACTER)
-'']
-   if(present(topic))then
-      textblock=[shortname]
-   elseif(present(prefix))then
-      if(prefix)then
-         do i=1,size(textblock)
-            textblock(i)=shortname//':'//trim(textblock(i))
-         enddo
+   SHORTNAME=${NAME/.*}
+   (
+   cat <<EOF
+   function help_${SHORTNAME}(prefix,topic,m_help) result (textblock)
+   character(len=256),allocatable   :: textblock(:)
+   logical,intent(in),optional      :: prefix
+   logical,intent(in),optional      :: topic
+   logical,intent(in),optional      :: m_help
+   character(len=*),parameter       :: shortname="$SHORTNAME"
+   character(len=:),allocatable,intent(out),optional :: name
+   textblock=[character(len=256)    :: &
+   '', &
+   $(TOCHARACTER)
+   '']
+      if(present(topic))then
+         textblock=[shortname]
+      elseif(present(prefix))then
+         if(prefix)then
+            do i=1,size(textblock)
+               textblock(i)=shortname//':'//trim(textblock(i))
+            enddo
+         endif
+      elseif(present(m_help))then
+         if(m_help)then
+            textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname in
+   	 textblock=' '//textblock ! shift to right by one character 
+            textblock(1)=shortname
+         endif
       endif
-   elseif(present(m_help))then
-      if(m_help)then
-         textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname in
-	 textblock=' '//textblock ! shift to right by one character 
-         textblock(1)=shortname
-      endif
-   endif
-end function help_${SHORTNAME}
+   end function help_${SHORTNAME}
 EOF
-)
-
-done) > /dev/null # help_names.f90
-###########################
-(
+   )
+done 
+################################################################################
 cd $BASE/man/cat3
 cat <<\EOF
 !===================================================================================================================================
@@ -303,6 +280,7 @@ character(len=:),allocatable     :: shortname
 integer                          :: i
 select case(name)
 EOF
+
 COUNT=0
 ls *.3fortran|while read NAME
 do
@@ -462,26 +440,20 @@ end module M_intrinsics
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 EOF
-) #> M_intrinsics.f90
-###########################
-exit
-###########################
-################################################################################
-exit
 ################################################################################
 # make HTML slides page
 
 cd $INTRINSICS
 FILES=$(
-for NAME in *.md
-do
-case "$NAME" in
-index.md);;
-*_index.md);;
-GNU*);;
-*)echo "$NAME" ;;
-esac
-done
+   for NAME in *.md
+   do
+   case "$NAME" in
+   index.md);;
+   *_index.md);;
+   GNU*);;
+   *)echo "$NAME" ;;
+   esac
+   done
 )
 echo FILES $FILES|xargs -n 5|column -t
 
@@ -506,49 +478,98 @@ do
 done >$BASE/docs/intrinsics.md
 
 echo "creating $BASE/docs/intrinsics_slidy.html" 1>&2
-#pandoc -f markdown_mmd -t slidy --metadata title='Fortran Intrinsics' --standalone --columns=72 $FILES > $BASE/docs/intrinsics_slidy.html
-pandoc -t slidy  --metadata title="Fortran Intrinsics" -s "$BASE/docs/intrinsics.md" --standalone --slide-level=1 -o $BASE/docs/intrinsics_slidy.html
-exit
+pandoc -t slidy  --metadata title="Fortran Intrinsics" -s "$BASE/docs/intrinsics.md" \
+   --standalone --slide-level=1 -o $BASE/docs/intrinsics_slidy.html
 
 ################################################################################
-
 # build new version of fman
-PROBLEMS
+
+# some expected problems for now
+cd $BASE ||exit
+mkdir -p expected
+mv example/c_f_pointer.f90 example/c_f_procpointer.f90 example/c_funloc.f90 expected
+
 fpm build 
 fpm install --prefix $BASE
-#################################################
+
 (
-# extract demo programs
-cd $BASE/intrinsics
-for NAME in *.md
-do
-case "$NAME" in
-index.md|*_index.md);;
-GNU_Free_Documentation_License.md);;
-*)
-   TOPIC=$(basename ${NAME,,} .md)
-   echo $NAME $TOPIC
-   fman -d $TOPIC > $BASE/example/$TOPIC.f90
-;;
-esac
-done
+   # extract demo programs
+   cd $BASE/intrinsics
+   for NAME in *.md
+   do
+   case "$NAME" in
+   index.md|*_index.md);;
+   GNU_Free_Documentation_License.md);;
+   *)
+      TOPIC=$(basename ${NAME,,} .md)
+      echo $NAME $TOPIC
+      fman -d $TOPIC > $BASE/example/$TOPIC.f90
+   ;;
+   esac
+   done
 )
-#################################################
+
 # build new version of demo programs
 PROBLEMS
 fpm build 
-#################################################
+
 # build fpm documenation from help too
-fpm2docs.sh
 #################################################
+#@(#) create man-pages, markdown and html slidy(1) files of fpm(1) help text using txt2man(1) and pandoc(1)
+# liked results better tnan from txt to man-pages using pandoc
+# can use groff to turn man-pages into a lot of formats as well
+export FPMPATH="$(dirname $(which fpm) )"
+source $(dirname $0)/sourceme.sh
+export PATH="$PATH:$FPMPATH"
+
+DOCS=$BASE/docs
+MANDIR=$BASE/man
+mkdir -p $DOCS
+mkdir -p $MANDIR/man1
+###############################################################################
+cat >$DOCS/slidy.md <<\EOF
+# FPM
+## Fortran Package Manager
+EOF
+(
+for NAME in fpm new build run test runner install update list help version
+do
+   echo "# $NAME"
+   echo " "
+   fpm help $NAME|
+   txt2man | 
+   tee $MANDIR/man1/$NAME.1 |
+   pandoc -t gfm -f man --columns=72 |
+   sed -e 's/fpm: *Leaving directory.*//' |
+   sed -e 's@/\*\*fpm\*\*@/fpm@g' >/$DOCS/$NAME.md
+   cat $DOCS/$NAME.md |
+   sed -e 's/^>//'|
+   sed -e 's/\(^# \)\([A-Z][A-Z ]*\)/\1__\L\2__/'|
+   sed -e 's/^# /## /'
+done
+) >>$DOCS/fpm_slidy.md
+###############################################################################
+pandoc -f gfm \
+ --columns=72 \
+ --slide-level=1 \
+ --metadata pagetitle="FPM command" \
+ --self-contained \
+ --standalone -o $DOCS/fpm_slidy.html \
+ -t slidy \
+ $DOCS/fpm_slidy.md
+###############################################################################
+echo 'see docs/ and man/ directories for output'
+###############################################################################
 #fman manual|spell
 #fman manual|findll -l 80
-#################################################
-)|tee /tmp/all.log
+###############################################################################
 cd $BASE
 git add .
 git commit -m 'update docs'
 git checkout main
 cp intrinsics/*.md $HOME/github/FORK/fortran-lang.org/learn/intrinsics/
+###############################################################################
+) |tee /tmp/all.log
+###############################################################################
 exit
-#################################################
+###############################################################################
