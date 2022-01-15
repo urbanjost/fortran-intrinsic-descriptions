@@ -1,12 +1,20 @@
 #!/bin/bash
+###############################################################################
+#@(#) create man-pages, markdown and html slidy(1) files of fpm(1) help text using txt2man(1) and pandoc(1)
+# liked results better tnan from txt to man-pages using pandoc
+# can use groff to turn man-pages into a lot of formats as well
+###############################################################################
 (
+exec 2>&1
 ################################################################################
 # setup
 
 # need fpm(1)
-export FPMPATH="$(dirname $(which fpm) )"
+export FPMPATH="$(dirname $(which fpm 2>/dev/null) )"
 
-export PATH=/usr/bin:/bin
+# need slidy(1)
+export SLIDYPATH="$(dirname $(which slidy 2>/dev/null) )"
+
 HERE=$(realpath $(dirname $0))
 BASE=$(dirname $HERE)
 export INTRINSICS=$BASE/intrinsics
@@ -15,12 +23,15 @@ export MANPATH=$BASE/man
 DOCS=$BASE/docs
 MANDIR=$BASE/man
 
+export NAME
+
 cd $BASE
 
-export PATH="$HERE:$PATH"
-export PATH="$BASE/bin:$PATH"
-export PATH="$PATH:$FPMPATH"
-echo $PATH|xargs -n 1 -d:
+export PATH=/usr/bin:/bin
+       PATH="$HERE:$PATH"
+       PATH="$BASE/bin:$PATH"
+       [ "$FPMPATH" != '' ] && PATH="$PATH:$FPMPATH"
+       [ "$SLIDYPATH" != '' ] && PATH="$PATH:$SLIDYPATH"
 ################################################################################
 # PURGE
 cd $BASE ||exit
@@ -63,95 +74,8 @@ cat $NAME |
 cat
 }
 ################################################################################
-# rebuild man-pages and M_intrinsics.f90
-cd $INTRINSICS
-for NAME in *.md
-do
-   case "$NAME" in
-   *_index.md) ;;
-   index.md) ;;
-   XXGNU_Free_Documentation_License.md) ;;
-   *)
-      SHORTNAME=$(basename $NAME .md)
-      SHORTNAME=${SHORTNAME,,}
-      echo "NAME: $NAME to $SHORTNAME"
-      ######################################################
-      # man-pages
-      (
-         header
-         sed -n -e '\%^##%,${ p }'  $NAME |
-            pandoc -f commonmark -t man --columns=72
-      )>$BASE/man/man3/$SHORTNAME.3fortran
-      sed -i -r 's/(\.SS \\f\[B\])(.*)(\\f.*)/\1\U\2\E\3/' $BASE/man/man3/$SHORTNAME.3fortran
-      sed -i -r 's/(\.SS \\f\[B\])(.*)(\\f.*)/.SH \U\2/' $BASE/man/man3/$SHORTNAME.3fortran
-      gzip --force $BASE/man/man3/$SHORTNAME.3fortran
-      ######################################################
-      (
-         sed -n -e '\%^##%,${ p }'  $NAME |
-            pandoc -f markdown_mmd -t plain --columns=72 |
-	    # remove trailing whitespace
-	    sed -e 's/ *$//' |
-	    # delete blank lines at top of file
-	    awk 'NF {f=1} f' |
-	    # get rid of artifact from converting from markdown
-	    grep -v '^-$' |
-	    cat -s
-      )>$BASE/man/cat3/$SHORTNAME.3fortran
-   ;;
-   esac
-done
-
-# removes the other directories ??????????
-cd $BASE/man
-mandb -c .
-env MANWIDTH=256 man --manpath=$BASE/man -k .|col -b
-env MANWIDTH=80  man --manpath=$BASE/man --regex '.*'|
-    col -b |
-    expand --tabs=3 > /tmp/allman.txt
-################################################################################
-cd $BASE 
-tar cvfz docs/fortran.tgz man
-################################################################################
-export NAME
-
-cd $BASE/man/cat3
-ls *.3fortran|while read NAME
-do
-   SHORTNAME=${NAME/.*}
-   (
-   cat <<EOF
-   function help_${SHORTNAME}(prefix,topic,m_help) result (textblock)
-   character(len=256),allocatable   :: textblock(:)
-   logical,intent(in),optional      :: prefix
-   logical,intent(in),optional      :: topic
-   logical,intent(in),optional      :: m_help
-   character(len=*),parameter       :: shortname="$SHORTNAME"
-   character(len=:),allocatable,intent(out),optional :: name
-   textblock=[character(len=256)    :: &
-   '', &
-   $(TOCHARACTER)
-   '']
-      if(present(topic))then
-         textblock=[shortname]
-      elseif(present(prefix))then
-         if(prefix)then
-            do i=1,size(textblock)
-               textblock(i)=shortname//':'//trim(textblock(i))
-            enddo
-         endif
-      elseif(present(m_help))then
-         if(m_help)then
-            textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname in
-   	 textblock=' '//textblock ! shift to right by one character 
-            textblock(1)=shortname
-         endif
-      endif
-   end function help_${SHORTNAME}
-EOF
-   )
-done 
-################################################################################
-cd $BASE/man/cat3
+WRITE_MODULE(){
+(
 cat <<\EOF
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -285,23 +209,17 @@ character(len=:),allocatable     :: shortname
 integer                          :: i
 select case(name)
 EOF
-
-COUNT=0
-ls *.3fortran|while read NAME
-do
-   SHORTNAME=${NAME/.*}
-   COUNT=$((COUNT+1))
-   cat <<EOF
-
-case('$COUNT','$SHORTNAME')
-
-textblock=[character(len=256) :: &
-'', &
-$(TOCHARACTER)
-'']
-
-shortname="$SHORTNAME"
-
+)
+}
+################################################################################
+END_MODULE(){
+(
+cat <<\EOF
+case default
+   allocate (character(len=256) :: textblock(0))
+end select
+contains
+subroutine select()
 if(present(topic))then
    if(topic)then
       textblock=[shortname]
@@ -323,13 +241,7 @@ if(present(m_help))then
       textblock(1)=shortname
    endif
 endif
-
-EOF
-done
-   cat <<\EOF
-case default
-   allocate (character(len=256) :: textblock(0))
-end select
+end subroutine select
 end function help_intrinsics_one
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -445,6 +357,129 @@ end module M_intrinsics
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 EOF
+)
+}
+################################################################################
+NAME_HELP(){
+(
+cd $BASE/man/cat3
+ls *.3fortran|while read NAME
+do
+   SHORTNAME=${NAME/.*}
+   (
+   cat <<EOF
+   function help_${SHORTNAME}(prefix,topic,m_help) result (textblock)
+   character(len=256),allocatable   :: textblock(:)
+   logical,intent(in),optional      :: prefix
+   logical,intent(in),optional      :: topic
+   logical,intent(in),optional      :: m_help
+   character(len=*),parameter       :: shortname="$SHORTNAME"
+   character(len=:),allocatable,intent(out),optional :: name
+   textblock=[character(len=256)    :: &
+   '', &
+   $(TOCHARACTER)
+   '']
+      if(present(topic))then
+         textblock=[shortname]
+      elseif(present(prefix))then
+         if(prefix)then
+            do i=1,size(textblock)
+               textblock(i)=shortname//':'//trim(textblock(i))
+            enddo
+         endif
+      elseif(present(m_help))then
+         if(m_help)then
+            textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname in
+   	 textblock=' '//textblock ! shift to right by one character 
+            textblock(1)=shortname
+         endif
+      endif
+   end function help_${SHORTNAME}
+EOF
+   )
+done 
+)
+}
+################################################################################
+# MAIN
+################################################################################
+# rebuild man-pages 
+cd $INTRINSICS
+for NAME in *.md
+do
+   case "$NAME" in
+   *_index.md) ;;
+   index.md) ;;
+   XXGNU_Free_Documentation_License.md) ;;
+   *)
+      SHORTNAME=$(basename $NAME .md)
+      SHORTNAME=${SHORTNAME,,}
+      echo "NAME: $NAME to $SHORTNAME"
+      ######################################################
+      # man-pages
+      (
+         header
+         sed -n -e '\%^##%,${ p }'  $NAME |
+            pandoc -f commonmark -t man --columns=72
+      )>$BASE/man/man3/$SHORTNAME.3fortran
+      sed -i -r 's/(\.SS \\f\[B\])(.*)(\\f.*)/\1\U\2\E\3/' $BASE/man/man3/$SHORTNAME.3fortran
+      sed -i -r 's/(\.SS \\f\[B\])(.*)(\\f.*)/.SH \U\2/' $BASE/man/man3/$SHORTNAME.3fortran
+      gzip --force $BASE/man/man3/$SHORTNAME.3fortran
+      ######################################################
+      (
+         sed -n -e '\%^##%,${ p }'  $NAME |
+            pandoc -f markdown_mmd -t plain --columns=72 |
+	    # remove trailing whitespace
+	    sed -e 's/ *$//' |
+	    # delete blank lines at top of file
+	    awk 'NF {f=1} f' |
+	    # get rid of artifact from converting from markdown
+	    grep -v '^-$' |
+	    cat -s
+      )>$BASE/man/cat3/$SHORTNAME.3fortran
+   ;;
+   esac
+done
+
+# removes the other directories ??????????
+cd $BASE/man
+mandb -c .
+env MANWIDTH=256 man --manpath=$BASE/man -k .|col -b
+env MANWIDTH=80  man --manpath=$BASE/man --regex '.*'|
+    col -b |
+    expand --tabs=3 > /tmp/allman.txt
+################################################################################
+cd $BASE 
+tar cvfz docs/fortran.tgz man
+################################################################################
+# rebuild M_intrinsics.f90
+cd $BASE/man/cat3
+(
+WRITE_MODULE
+
+COUNT=0
+ls *.3fortran|while read NAME
+do
+   SHORTNAME=${NAME/.*}
+   COUNT=$((COUNT+1))
+   cat <<EOF
+
+case('$COUNT','$SHORTNAME')
+
+textblock=[character(len=256) :: &
+'', &
+$(TOCHARACTER)
+'']
+
+shortname="$SHORTNAME"
+
+call select()
+
+EOF
+done
+
+END_MODULE
+) >$BASE/src/M_intrinsics.f90
 ################################################################################
 # make HTML slides page
 
@@ -489,12 +524,11 @@ pandoc -t slidy  --metadata title="Fortran Intrinsics" -s "$BASE/docs/intrinsics
 ################################################################################
 # build new version of fman
 
-# some expected problems for now
 cd $BASE ||exit
-mv example/c_f_pointer.f90 example/c_f_procpointer.f90 example/c_funloc.f90 expected
 
 fpm build 
 fpm install --prefix $BASE
+fpm install 
 
 (
    # extract demo programs
@@ -515,15 +549,16 @@ fpm install --prefix $BASE
 
 # build new version of demo programs
 
+# some expected problems for now
+mv example/c_f_pointer.f90 example/c_f_procpointer.f90 example/c_funloc.f90 expected
+
 fpm build 
 
 # build fpm documenation from help too
 
 ###############################################################################
-#@(#) create man-pages, markdown and html slidy(1) files of fpm(1) help text using txt2man(1) and pandoc(1)
-# liked results better tnan from txt to man-pages using pandoc
-# can use groff to turn man-pages into a lot of formats as well
-###############################################################################
+# html slidy(1) files of fpm(1) help text using txt2man(1) and pandoc(1)
+# liked results better than from txt to man-pages using pandoc
 cat >$DOCS/slidy.md <<\EOF
 # FPM
 ## Fortran Package Manager
@@ -560,11 +595,15 @@ echo 'see docs/ and man/ directories for output'
 #fman manual|spell
 #fman manual|findll -l 80
 ###############################################################################
-cd $BASE
-git add .
-git commit -m 'update docs'
-git checkout main
-cp intrinsics/*.md $HOME/github/FORK/fortran-lang.org/learn/intrinsics/
+#cd $BASE
+#git add .
+#git commit -m 'update docs'
+#git checkout main
+###############################################################################
+if [ -d $HOME/github/FORK/fortran-lang.org/learn/intrinsics/ ]
+then
+   cp intrinsics/*.md $HOME/github/FORK/fortran-lang.org/learn/intrinsics/
+fi
 ###############################################################################
 ) |tee /tmp/all.log
 ###############################################################################

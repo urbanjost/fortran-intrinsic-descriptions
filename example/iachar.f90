@@ -1,5 +1,8 @@
     program demo_iachar
     implicit none
+
+    write(*,*)iachar(['a','z','A','Z'])
+
     ! create function to convert uppercase letters to lowercase
        write(*,'(a)')lower('abcdefg ABCDEFG')
     contains

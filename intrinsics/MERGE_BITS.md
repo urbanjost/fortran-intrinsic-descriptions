@@ -9,7 +9,7 @@ __merge\_bits__(3) - \[BIT:COPY\] Merge bits using a mask
 
 ## __Syntax__
 ```fortran
-result = merge\_bits(i, j, mask)
+result = merge_bits(i, j, mask)
 
     elemental function merge_bits(i,j,mask) result(r)
     integer(kind=KIND) ,intent(in) :: i, j, mask
@@ -90,7 +90,7 @@ character(len=*),parameter :: fmt='(*(g0, 1X))'
    & merge_bits(o'12345'   , 32767_int16, b'0000000000010101'), &
    & merge_bits(32767_int16,    o'12345',             z'1234')
 
-   ! a do-it-yourself equivalent for comparision and validation
+   ! a do-it-yourself equivalent for comparison and validation
    print fmt, &
    & ior(iand(32767_int16, 32767_int16),                   &
    &   iand(o'12345', not(32767_int16))),                  &
