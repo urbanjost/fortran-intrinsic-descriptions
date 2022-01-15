@@ -14,6 +14,12 @@ export MANPATH=$BASE/man
 export FPMPATH="$(dirname $(which fpm) )"
 export PATH="$PATH:$FPMPATH"
 
+export FPMPATH="$(dirname $(which fpm) )"
+export PATH="$PATH:$FPMPATH"
+
+DOCS=$BASE/docs
+MANDIR=$BASE/man
+
 cd $BASE
 ################################################################################
 # PURGE
@@ -24,12 +30,13 @@ rm -fv docs/*
 rm -fv bin/fman
 rm -rfv build
 
-mkdir -p $BASE/man/man1 $BASE/docs $BASE/example
-mkdir -p $BASE/man/man3  $BASE/man/cat3
+mkdir -p $DOCS
+mkdir -p $BASE/docs $BASE/example
+mkdir -p $MANDIR/man3  $MANDIR/cat3  $MANDIR/man1
+mkdir -p $BASE/expected
 ################################################################################
 # FUNCTIONS
 ################################################################################
-# rebuild man-pages and M_intrinsics.f90
 header(){
 cat <<EOF
 ." Text automatically generated
@@ -56,8 +63,8 @@ cat $NAME |
 cat
 }
 ################################################################################
+# rebuild man-pages and M_intrinsics.f90
 cd $INTRINSICS
-mkdir -p $BASE/man/man3 $BASE/man/cat3
 for NAME in *.md
 do
    case "$NAME" in
@@ -68,7 +75,6 @@ do
       SHORTNAME=$(basename $NAME .md)
       SHORTNAME=${SHORTNAME,,}
       echo "NAME: $NAME to $SHORTNAME"
-
       ######################################################
       # man-pages
       (
@@ -101,8 +107,7 @@ mandb -c .
 env MANWIDTH=256 man --manpath=$BASE/man -k .|col -b
 env MANWIDTH=80  man --manpath=$BASE/man --regex '.*'|
     col -b |
-    expand --tabs=3 |
-    tee /tmp/panman.out
+    expand --tabs=3 
 ################################################################################
 cd $BASE 
 tar cvfz docs/fortran.tgz man
@@ -486,7 +491,6 @@ pandoc -t slidy  --metadata title="Fortran Intrinsics" -s "$BASE/docs/intrinsics
 
 # some expected problems for now
 cd $BASE ||exit
-mkdir -p expected
 mv example/c_f_pointer.f90 example/c_f_procpointer.f90 example/c_funloc.f90 expected
 
 fpm build 
@@ -518,14 +522,6 @@ fpm build
 #@(#) create man-pages, markdown and html slidy(1) files of fpm(1) help text using txt2man(1) and pandoc(1)
 # liked results better tnan from txt to man-pages using pandoc
 # can use groff to turn man-pages into a lot of formats as well
-export FPMPATH="$(dirname $(which fpm) )"
-source $(dirname $0)/sourceme.sh
-export PATH="$PATH:$FPMPATH"
-
-DOCS=$BASE/docs
-MANDIR=$BASE/man
-mkdir -p $DOCS
-mkdir -p $MANDIR/man1
 ###############################################################################
 cat >$DOCS/slidy.md <<\EOF
 # FPM
