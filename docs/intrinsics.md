@@ -10034,7 +10034,7 @@ __merge\_bits__(3) - \[BIT:COPY\] Merge bits using a mask
 
 ## __Syntax__
 ```fortran
-result = merge\_bits(i, j, mask)
+result = merge_bits(i, j, mask)
 
     elemental function merge_bits(i,j,mask) result(r)
     integer(kind=KIND) ,intent(in) :: i, j, mask

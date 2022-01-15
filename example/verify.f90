@@ -1,19 +1,27 @@
     program demo_verify
     implicit none
+    ! some useful character sets
     character(len=*),parameter :: int='0123456789'
     character(len=*),parameter :: hex='abcdef0123456789'
     character(len=*),parameter :: low='abcdefghijklmnopqrstuvwxyz'
     character(len=*),parameter :: upp='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
     character(len=20):: string='   Howdy There!'
     character(len=6) :: strings(2)=["Howdy ","there!"]
     character(len=2) :: sets(2)=["de","gh"]
 
-       write(*,*)'first non-blank character ',verify(string, ' ')
+       ! first non-lowercase non-blank character
+       if(verify(string,low).eq.0)then
+           write(*,*) '['//string//'] is all lowercase letters'
+       else
+           write(*,*) '['//string//'] is not all lowercase letters'
+       endif
+
+       write(*,'(*(g0))')'first non-blank character in ['&
+       & //string//'] is at column ',verify(string, ' ')
+
        ! NOTE: same as len_trim(3)
        write(*,*)'last non-blank character',verify(string, ' ',back=.true.)
-
-       ! first non-lowercase non-blank character
-       write(*,*) verify(string,low//' ')
 
        !! elemental -- using arrays for both strings and for sets
 

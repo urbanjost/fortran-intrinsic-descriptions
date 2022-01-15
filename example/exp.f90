@@ -21,7 +21,7 @@
        ! the real compoenent of the input must be less than or equal to
        write(*,*)'maximum real component',log(huge(0.0))
        ! or for double precision
-       write(*,*)'maximum doubleprecision real component',log(huge(0.0d0))
+       write(*,*)'maximum doubleprecision component',log(huge(0.0d0))
 
        ! but since the imaginary component is passed to the cos(3) and sin(3)
        ! functions the imaginary component can be any real value
