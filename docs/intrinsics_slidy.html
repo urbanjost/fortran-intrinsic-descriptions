@@ -9905,14 +9905,18 @@ dim=3 :( 2 3 )
 <a class="sourceLine" id="cb490-6" title="6"></a>
 <a class="sourceLine" id="cb490-7" title="7">   <span class="fu">print</span> <span class="kw">*</span>, <span class="bu">sign</span>( <span class="kw">-</span><span class="fl">12.0</span>, <span class="kw">[</span><span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="kw">-</span><span class="fl">1.0</span><span class="kw">]</span> )</a>
 <a class="sourceLine" id="cb490-8" title="8"></a>
-<a class="sourceLine" id="cb490-9" title="9">   <span class="fu">print</span> <span class="kw">*</span>,<span class="st">&#39;can I distinguish 0 from -0? &#39;</span>,<span class="bu">sign</span>(<span class="fl">1.0</span>,<span class="kw">-</span><span class="fl">0.0</span>)<span class="op">.ne.</span><span class="bu">sign</span>(<span class="fl">1.0</span>, <span class="fl">0.0</span>)</a>
-<a class="sourceLine" id="cb490-10" title="10"><span class="kw">end program</span> demo_sign</a></code></pre></div>
+<a class="sourceLine" id="cb490-9" title="9"><span class="op">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</a>
+<a class="sourceLine" id="cb490-10" title="10">   <span class="fu">print</span> <span class="kw">*</span>,<span class="st">&#39;can I distinguish 0 from -0? &#39;</span>,<span class="bu">sign</span>(<span class="fl">1.0</span>,<span class="kw">-</span><span class="fl">0.0</span>)<span class="op">.ne.</span><span class="bu">sign</span>(<span class="fl">1.0</span>, <span class="fl">0.0</span>)</a>
+<a class="sourceLine" id="cb490-11" title="11"><span class="op">======</span><span class="kw">=</span></a>
+<a class="sourceLine" id="cb490-12" title="12">   <span class="fu">print</span> <span class="kw">*</span>,  <span class="st">&#39;can I distinguish 0 from -0? &#39;</span>, <span class="bu">sign</span>( <span class="fl">1.0</span>, <span class="kw">-</span><span class="fl">0.0</span> ) <span class="op">.ne.</span> <span class="bu">sign</span>( <span class="fl">1.0</span>, <span class="fl">0.0</span> )</a>
+<a class="sourceLine" id="cb490-13" title="13"><span class="op">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> <span class="dv">9</span>b8cd0c5596d00eea5cc52b465f7b321b7e6c2d5</a>
+<a class="sourceLine" id="cb490-14" title="14"><span class="kw">end program</span> demo_sign</a></code></pre></div>
 <p>Results:</p>
 <pre class="text"><code>             12
              12
             -12
       12.00000       12.00000      -12.00000
-    can I distinguise 0 from -0?  F</code></pre>
+    can I distinguish 0 from -0?  F</code></pre>
 <h2 id="standard-172"><strong>Standard</strong></h2>
 <p>FORTRAN 77 and later</p>
 <h6 id="fortran-lang-intrinsic-descriptions-license-mit-2">fortran-lang intrinsic descriptions (license: MIT)</h6>

@@ -14900,7 +14900,11 @@ textblock=[character(len=256) :: &
 '', &
 '       print *, sign( -12.0, [1.0, 0.0, -1.0] )', &
 '', &
+'    <<<<<<< HEAD', &
 '       print *,''can I distinguish 0 from -0? '',sign(1.0,-0.0).ne.sign(1.0, 0.0)', &
+'    =======', &
+'       print *,  ''can I distinguish 0 from -0? '', sign( 1.0, -0.0 ) .ne. sign( 1.0, 0.0 )', &
+'    >>>>>>> 9b8cd0c5596d00eea5cc52b465f7b321b7e6c2d5', &
 '    end program demo_sign', &
 '', &
 'Results:', &
@@ -14909,7 +14913,7 @@ textblock=[character(len=256) :: &
 '                 12', &
 '                -12', &
 '          12.00000       12.00000      -12.00000', &
-'        can I distinguise 0 from -0?  F', &
+'        can I distinguish 0 from -0?  F', &
 '', &
 'STANDARD', &
 '', &
