@@ -1,0 +1,82 @@
+NAME
+
+__random_init(3) - [MATHEMATICS:RANDOM] multi-image pseudorandom number
+generator initialization.
+
+SYNTAX
+
+       call random_init (repeatable, image_distinct)
+
+         subroutine random_init(repeatable, image_distinct)
+         logical,intent(in) :: repeatable
+         logical,intent(in) :: image_distinct
+
+DESCRIPTION
+
+random_init(3f) is equivalent to invoking random_seed(3f) with a
+processor-dependent value for PUT.
+
+The effect of calling RANDOM_INIT depends on the values of the
+REPEATABLE and IMAGE_DISTINCT arguments:
+
+Case (i): CALLRANDOM_INIT(REPEATABLE=true,IMAGE_DISTINCT=true)
+
+                  PUT different on every invoking image.
+          In each execution of the program with the same execution
+          environment, if the invoking image index value in the
+          initial team is the same, the value for PUT shall be
+          the same.
+
+Case (ii): CALL RANDOM_INIT(REPEATABLE=true,IMAGE_DISTINCT=false)
+
+                  PUT is the same on every invoking image.
+          In each execution of the program with the same execution
+          environment, the value for PUT shall be the same.
+
+Case (iii): CALL RANDOM_INIT(REPEATABLE=false,IMAGE_DISTINCT=true)
+
+                  PUT is different on every invoking image.
+          Different values for PUT shall be used for subsequent
+          invocations, and for each execution of the program.
+
+Case (iv): CALL RANDOM_INIT(REPEATABLE=false,IMAGE_DISTINCT=false)
+
+                  PUT that is the same on every invoking image.
+          Different values for PUT shall be used for subsequent
+          invocations, and for each execution of the program.
+
+In each of these cases, a different processor-dependent value for PUT
+shall result in a different sequence of pseudorandom numbers.
+
+ARGUMENTS
+
+    REPEATABLE
+        when .true. it is equivalent to invoking RANDOM_SEED with a
+        processor-dependent value for PUT that is different on every
+        invoking image.
+
+-   IMAGE_DISTINCT
+
+EXAMPLES
+
+Sample program:
+
+    program demo_random_init
+       ! random_number(3f) on this invoking image will generate a sequence
+       ! that differs form other images that invoke a similar statement, as
+       ! well as being different on subsequent program execution.
+       call random_init (repeatable=.false., image_distinct=.true.)
+
+    end program demo_random_init
+
+Results:
+
+STANDARD
+
+Fortran 2018 and later
+
+SEE ALSO
+
+RANDOM_SEED(3), __random_init(3)
+
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost

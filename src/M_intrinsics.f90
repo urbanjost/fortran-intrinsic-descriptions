@@ -13518,7 +13518,7 @@ textblock=[character(len=256) :: &
 '    result = radix(x)', &
 '', &
 '       function radix(x) result(r)', &
-'       TYPE(kind=KIND),intent(in) :: x', &
+'       TYPE(kind=KIND),intent(in) :: x(..)', &
 '       integer :: r', &
 '', &
 'where TYPE is _integer_ or _real_ and KIND is any kind supported by the', &
@@ -13533,8 +13533,8 @@ textblock=[character(len=256) :: &
 'ARGUMENTS', &
 '', &
 '    X', &
-'        The type of this value is used to determine which type model to', &
-'        query', &
+'        The type of this value (a scalar or array) is used to determine', &
+'        which type model to query', &
 '', &
 'RETURNS', &
 '', &
@@ -13585,7 +13585,10 @@ textblock=[character(len=256) :: &
 '', &
 'SYNTAX', &
 '', &
-'       random_number(harvest)', &
+'       call random_number(harvest)', &
+'', &
+'         subroutine random_number(harvest)', &
+'         real(kind=KIND),intent(out) :: harvest(..)', &
 '', &
 'DESCRIPTION', &
 '', &
@@ -13595,7 +13598,9 @@ textblock=[character(len=256) :: &
 'ARGUMENTS', &
 '', &
 '    HARVEST', &
-'        Shall be a scalar or an array of type _real_.', &
+'        a scalar or an array of type _real_ that will be set with', &
+'        pseudorandom values from the uniform distribution in the', &
+'        interval 0.0 <= x < 1.0 .', &
 '', &
 'EXAMPLES', &
 '', &
@@ -13604,56 +13609,49 @@ textblock=[character(len=256) :: &
 '    program demo_random_number', &
 '    use, intrinsic :: iso_fortran_env, only : dp=>real64', &
 '    implicit none', &
-'    integer, allocatable :: seed(:)', &
-'    integer              :: n', &
-'    integer              :: first,last', &
-'    integer              :: i', &
-'    integer              :: rand_int', &
+'    integer              :: i, n, first,last, rand_int', &
 '    integer,allocatable  :: count(:)', &
 '    real(kind=dp)        :: rand_val', &
-'       call random_seed(size = n)', &
-'       allocate(seed(n))', &
-'       call random_seed(get=seed)', &
+'       call random_seed() ! initialize random number sequence', &
+'       ! generate a lot of random integers from 1 to 10 and count them.', &
 '       first=1', &
 '       last=10', &
 '       allocate(count(last-first+1))', &
 '       ! To have a discrete uniform distribution on the integers', &
 '       ! [first, first+1, ..., last-1, last] carve the continuous', &
 '       ! distribution up into last+1-first equal sized chunks,', &
-'       ! mapping each chunk to an integer.', &
-'       !', &
-'       ! One way is:', &
+'       ! mapping each chunk to an integer. One way is:', &
 '       !   call random_number(rand_val)', &
 '       ! choose one from last-first+1 integers', &
 '       !   rand_int = first + FLOOR((last+1-first)*rand_val)', &
-'          count=0', &
-'          ! generate a lot of random integers from 1 to 10 and count them.', &
-'          ! with a large number of values you should get about the same', &
-'          ! number of each value', &
-'          do i=1,100000000', &
-'             call random_number(rand_val)', &
-'             rand_int=first+floor((last+1-first)*rand_val)', &
-'             if(rand_int.ge.first.and.rand_int.le.last)then', &
-'                count(rand_int)=count(rand_int)+1', &
-'             else', &
-'                write(*,*)rand_int,'' is out of range''', &
-'             endif', &
-'          enddo', &
-'          write(*,''(i0,1x,i0)'')(i,count(i),i=1,size(count))', &
+'       count=0', &
+'       ! generate a lot of random integers from 1 to 10 and count them.', &
+'       ! with a large number of values you should get about the same', &
+'       ! number of each value', &
+'       do i=1,100000000', &
+'          call random_number(rand_val)', &
+'          rand_int=first+floor((last+1-first)*rand_val)', &
+'          if(rand_int.ge.first.and.rand_int.le.last)then', &
+'             count(rand_int)=count(rand_int)+1', &
+'          else', &
+'             write(*,*)rand_int,'' is out of range''', &
+'          endif', &
+'       enddo', &
+'       write(*,''(i0.3,1x,i12)'')(i,count(i),i=1,size(count))', &
 '    end program demo_random_number', &
 '', &
 'Results:', &
 '', &
-'       1 10003588', &
-'       2 10000104', &
-'       3 10000169', &
-'       4 9997996', &
-'       5 9995349', &
-'       6 10001304', &
-'       7 10001909', &
-'       8 9999133', &
-'       9 10000252', &
-'       10 10000196', &
+'       001      9992201', &
+'       002      9998539', &
+'       003     10000985', &
+'       004     10001765', &
+'       005     10001004', &
+'       006     10003617', &
+'       007     10000626', &
+'       008      9997512', &
+'       009     10007993', &
+'       010      9995758', &
 '', &
 'STANDARD', &
 '', &
@@ -13663,7 +13661,7 @@ textblock=[character(len=256) :: &
 '', &
 'RANDOM_SEED(3)', &
 '', &
-'fortran-lang intrinsic descriptions', &
+'fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '']
 
 shortname="random_number"
@@ -13677,37 +13675,61 @@ textblock=[character(len=256) :: &
 '', &
 'NAME', &
 '', &
-'RANDOM_SEED(3) - [MATHEMATICS:RANDOM] Initialize a pseudo-random number', &
-'sequence', &
+'RANDOM_SEED(3) - [MATHEMATICS:RANDOM] Pseudorandom number generator', &
+'control.', &
 '', &
 'SYNTAX', &
 '', &
 '    call random_seed(size, put, get)', &
 '', &
+'       subroutine random_seed(size, put, get)', &
+'       integer,intent(out),optional :: size', &
+'       integer,intent(in),optional  :: put(*)', &
+'       integer,intent(out),optional :: get(*)', &
+'', &
+'where the size of put() and get() must be >= SIZE, and the call must', &
+'either have no parameters or one.', &
+'', &
 'DESCRIPTION', &
 '', &
-'Restarts or queries the state of the pseudorandom number generator used', &
-'by random_number.', &
+'RANDOM_SEED(3F) initializes and/or queries the seed used by the', &
+'pseudo-random number generator procedure RANDOM_NUMBER(3F). It can be', &
+'used to start a repeatable sequence of pseudorandom values.', &
 '', &
-'If random_seed is called without arguments, it is seeded with random', &
-'data retrieved from the operating system.', &
+'To reproduce the same sequence of pseudo_random values one needs to', &
+'provide the same starting point, defined by an array of whole numbers', &
+'called the seed. Fortran does not define what random number generator', &
+'algorithm should be used by the random_number(3f) procedure so different', &
+'size seeds may be required with different compilers. The SIZE parameter', &
+'is provided so that this size may be queried generically.', &
+'', &
+'Do not depend on whether random_number(3f) generates the same or a', &
+'random sequence by default the first time it is called. If RANDOM_SEED()', &
+'is called without arguments, it is seeded with random data retrieved', &
+'from the operating system. If you want the same sequence each time', &
+'provide the seed array.', &
+'', &
+'Restarts or queries the state of the pseudorandom number generator used', &
+'by RANDOM_NUMBER().', &
 '', &
 'ARGUMENTS', &
 '', &
 '    SIZE', &
-'        (Optional) Shall be a scalar and of type default _integer_, with', &
-'        INTENT(OUT). It specifies the minimum size of the arrays used', &
-'        with the PUT and GET arguments.', &
+'        specifies the minimum size of the arrays used as the seed arrays', &
+'        PUT and GET.', &
 '', &
 '    PUT', &
-'        (Optional) Shall be an array of type default _integer_ and rank', &
-'        one. It is INTENT(IN) and the size of the array must be larger', &
-'        than or equal to the number returned by the SIZE argument.', &
+'        An array of values used in a processor-dependent manner to', &
+'        define a specific sequence of random numbers.', &
+'', &
+'    If no arguments at all are present, the processor assigns a', &
+'    processor-dependent value to the seed.', &
 '', &
 '    GET', &
-'        (Optional) Shall be an array of type default _integer_ and rank', &
-'        one. It is INTENT(OUT) and the size of the array must be larger', &
-'        than or equal to the number returned by the SIZE argument.', &
+'        It is assigned the value of the seed when queried. The values', &
+'        may then be used as the PUT values on a subsequent call to', &
+'        __random_seed() to reset the pseudorandom sequence returned by', &
+'        random_number(3f) to the same sequence.', &
 '', &
 'EXAMPLES', &
 '', &
@@ -13715,20 +13737,34 @@ textblock=[character(len=256) :: &
 '', &
 '    program demo_random_seed', &
 '    implicit none', &
+'    real :: vals(4)', &
 '    integer, allocatable :: seed(:)', &
 '    integer :: n', &
 '', &
+'       CALL RANDOM_SEED() ! Processor-dependent initialization', &
+'', &
+'       ! set size of seed array', &
 '       call random_seed(size = n)', &
+'', &
+'       ! get the current seed array', &
 '       allocate(seed(n))', &
 '       call random_seed(get=seed)', &
-'       write (*, *) seed', &
+'', &
+'       ! generate some random_numbers', &
+'       call random_number(vals)', &
+'       write (*, *) vals', &
+'', &
+'       ! reset to the same starting point', &
+'       call random_seed(put=seed)', &
+'       ! to prove vals is really reset to same sequence', &
+'       vals=0.0', &
+'       call random_number(vals)', &
+'       write (*, *) vals', &
 '', &
 '    end program demo_random_seed', &
 '', &
-'Results:', &
-'', &
-'         -674862499 -1750483360  -183136071  -317862567   682500039', &
-'         349459   344020729 -1725483289', &
+'Typical Results: ```text 3.9208680E-07 2.5480442E-02 0.3525161 0.6669145', &
+'3.9208680E-07 2.5480442E-02 0.3525161 0.6669145', &
 '', &
 'STANDARD', &
 '', &
@@ -13736,9 +13772,9 @@ textblock=[character(len=256) :: &
 '', &
 'SEE ALSO', &
 '', &
-'RANDOM_NUMBER(3)', &
+'RANDOM_NUMBER(3), __random_init(3)', &
 '', &
-'fortran-lang intrinsic descriptions', &
+'fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '']
 
 shortname="random_seed"

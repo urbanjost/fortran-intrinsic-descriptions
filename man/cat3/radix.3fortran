@@ -7,7 +7,7 @@ SYNTAX
     result = radix(x)
 
        function radix(x) result(r)
-       TYPE(kind=KIND),intent(in) :: x
+       TYPE(kind=KIND),intent(in) :: x(..)
        integer :: r
 
 where TYPE is _integer_ or _real_ and KIND is any kind supported by the
@@ -22,8 +22,8 @@ binary computer will just always return 2.
 ARGUMENTS
 
     X
-        The type of this value is used to determine which type model to
-        query
+        The type of this value (a scalar or array) is used to determine
+        which type model to query
 
 RETURNS
 
