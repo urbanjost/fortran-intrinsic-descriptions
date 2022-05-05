@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="fortran-intrinsic-descriptions module">
+    
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="./favicon.png">
+
+    <title> fortran-intrinsic-descriptions </title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/pygments.css" rel="stylesheet">
+    <link href="./css/font-awesome.min.css" rel="stylesheet">
+    <link href="./css/local.css" rel="stylesheet">
+    
+    <link  href="./tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="./js/jquery-2.1.3.min.js"></script>
+    <script src="./js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="./index.html">fortran-intrinsic-descriptions </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="./sourcefile/m_intrinsics.f90.html">Source File</a></li>
+        
+        
+        
+            <li><a href="./lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="./lists/procedures.html">Procedures</a></li>
+        
+               
+        
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./sourcefile/m_intrinsics.f90.html">Source File</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/procedures.html">Procedures</a></li>
+
+                             
+
+          </ul>
+        
+        <form action="./search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <p>fortran-intrinsic-descriptions module</p>
+        	 
+	<p> Find us on&hellip;</p>
+        <p>
+        	 
+          <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/fortran-intrinsic-descriptions" role="button">GitHub</a>
+			 
+			 
+			 
+			 
+	         
+			 
+        </p>
+      </div>
+
+      <div class="row" id='text'>
+		  
+        <div class="col-md-8">
+		  
+          <h1>fortran-intrinsic-descriptions</h1>
+          <!--
+author_pic:
+twitter:
+website:
+-->
+<h1 id="fortran-langorg-intrinsic-descriptions-and-fman1">fortran-lang.org intrinsic descriptions and fman(1)</h1>
+<p>published at
+<a href="https://urbanjost.github.io/fortran-intrinsic-descriptions/">https://urbanjost.github.io/fortran-intrinsic-descriptions/</a></p>
+<p>Local links in the following document are written to work with the published site. </p>
+<ul>
+<li><a href="docs/intrinsics.md">intrinsics</a></li>
+<li><a href="docs/intrinsics_slidy.html">intrinsics slides</a></li>
+<li><a href="docs/fortran.tgz">fortran.tgz</a></li>
+</ul>
+<p>A snapshot (2021-12-29) of the base source for the Fortran intrinsic
+descriptions at fortran-lang.org.</p>
+<p>You can contribute directly to the documents at fortran-lang.org but if
+it is easier you can contribute <em>demo programs in particular</em> here as
+well and I can periodically merge them back into the repository as PR
+requests, as setting up to work with the minibooks locally can require
+quite a bit of infrastructure (but try that first).</p>
+<p>They are now maintained as kramdown files (a variant of markdown).</p>
+<p>Stylistically the files follow a formalized structure based on man-pages.
+This allows for them to easily be converted to actual man-pages for
+installallation in ULEs (Unix-Like Environments), and to readily be
+parsed for other uses like the Fortran fman(1) program.</p>
+<p>Since there are skeletons for the vast majority of the intrinsics in
+place I think the required structure is obvious by example, but let me
+know if not.</p>
+<p>Using the markdown format allows for readily converting to other formats
+(including other markdown variants) using utilities like pandoc(1); as the
+particular variant currently being used (kramdown) is likely to change.</p>
+<p>Note that each file should have a &ldquo;program demo_$NAME&rdquo; and &ldquo;end program
+demo_$NAME&rdquo; line in it so the primary example program can easily be
+extracted, as with fman(1). This is particularly useful for automatic
+verification of the demo programs.</p>
+<p>There was a vote on the Fortran Discourse forum, and having a web
+page description that can include graphics, links, and mathematics was
+important enough that the CLI interfaces such as fman(1) may suffer,
+as current methods do not represent such material accurately (although
+if web pages are accessible CLI web browser commands like w3m(1),
+links(1), and lynx(1) might make that a mute point). This directly
+lead to deciding to keep the primary source of the documentation in the
+minibook-compatible format (previously, the primary source was kept in
+a format used to maintain the GPF (General-Purpose Fortran) repository,
+but that is no longer pertinent).</p>
+<p>Since the kramdown files are now the primary documents utilities like
+pandoc(1) are a good avenue for converting the files to other formats.</p>
+<p>Note that to display on the fortran-lang.org the files are automatically
+converted to HTML files; so there are HTML versions of each document
+relatively accessible to everyone.</p>
+<h2 id="directly-making-prs-to-fortran-langorg">Directly making PRs to fortran-lang.org</h2>
+<p>If you go to the fortran-lang.org site and see how (currently) to
+directly contribute to the mini-books you can find more information.</p>
+<p>As an example, on a Linx box something like this (it will probably need
+tweaked &ndash; see fortran-lang.org site for details) will download my PR
+to the site, and set you up to modify the intrinsics files and make pull
+requests to change them</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+git clone https://github.com/urbanjost/fortran-lang.org
+<span class="nb">cd</span> fortran-lang.org
+sudo apt install jekyll
+sudo apt install ruby-dev
+sudo gem install bundler
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>ruby -e <span class="s1">&#39;print Gem.user_dir&#39;</span><span class="k">)</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+bundle config <span class="nb">set</span> path <span class="nv">$HOME</span>/<span class="s1">&#39;.bundle&#39;</span>
+bundle install
+<span class="c1"># Serving locally</span>
+bundle <span class="nb">exec</span> jekyll serve --watch <span class="p">&amp;</span>
+<span class="c1"># to view the website.</span>
+<span class="nv">$VIEWER</span> http://localhost:4000
+</code></pre></div>
+
+<p>where $VIEWER is your browser and/or xdg-open, gnome-open, cygstart,
+start, open, konquerer, nautilus &hellip;</p>
+<h2 id="fman">fman</h2>
+<p>There were other paths taken, so on a ULS with pandoc installed you can
+probably build some real man-pages and some interesting HTML versions of
+the documentation, but since formulas and links and graphics are being
+added this will become less useful, but is the main way I look up the
+routines, and man-pages can be called from inside of the vim(1) editor,
+and I like to extract the example codes or other parts of the documents
+straight into code files so the adventurous can play with installing
+pandoc(1) and running</p>
+<div class="codehilite"><pre><span></span><code>bash scripts/all.sh
+</code></pre></div>
+
+<p>which generates man-pages and the <code>fman</code> program and some files in the docs/ directory
+if successful.</p>
+<p>fman (Like <code>man</code>, but for Fortran man-pages) is a Fortran program
+that displays descriptions of the Fortran intrinsics.  It is
+platform-independent, so it is particularly useful for command-line use
+on platforms without man-pages. <code>fman</code> can</p>
+<ul>
+<li>display a short description of each topic including category keys</li>
+<li>display a description of any standard Fortran intrinsic</li>
+<li>allow capture of a small working example program for most topics</li>
+<li>can search the TOC (Table of Contents) or all descriptions with regular expressions</li>
+</ul>
+<p>To build it requires <code>git</code>, <code>gfortran</code>, and <code>fpm</code>(Fortran Package Manager).
+See <a href="https://github.com/urbanjost/plugins">plugins</a>.</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># TRY IT</span>
+
+   <span class="c1"># if you placed the program in a directory in your command path you</span>
+   <span class="c1"># are ready to go!</span>
+   fman --help
+   fman
+   fman -d sin
+   fman tan
+   fman --regex <span class="s1">&#39;charact&#39;</span>
+   fman manual &gt;book.txt
+   fman not -c <span class="p">|</span>less -r  <span class="c1"># if your terminal emulator supports ANSI color control sequences</span>
+</code></pre></div>
+
+<h3 id="using-fman1-with-vim1">Using fman(1) with vim(1)</h3>
+<p>From the vim(1) editor to extract just the demo program
+into the current position use</p>
+<div class="codehilite"><pre><span></span><code>   :r! fman -d date_and_time
+</code></pre></div>
+
+<h3 id="using-fman1-with-vip1-and-bash1">Using fman(1) with vip(1) and bash(1)</h3>
+<p>The vip(1) script lets you use the vi(1) command with pipes.  See the
+bash/ directory for a sample. On ULS platforms you can start up the editor
+on the fman(1) output. This is my favorite mode.</p>
+<div class="codehilite"><pre><span></span><code>fman tan<span class="p">|</span>vip
+</code></pre></div>
+
+<p>Add this to your ~/.bashrc file</p>
+<div class="codehilite"><pre><span></span><code>fm<span class="o">(){</span>
+<span class="o">(</span>
+<span class="k">case</span> <span class="s2">&quot;</span><span class="nv">$*</span><span class="s2">&quot;</span> <span class="k">in</span>
+*-d*<span class="o">)</span> <span class="nb">export</span> <span class="nv">EDITOR</span><span class="o">=</span><span class="s1">&#39;vim -c &quot;set filetype=fortran&quot;&#39;</span> <span class="p">;;</span>
+*<span class="o">)</span>    <span class="nb">export</span> <span class="nv">EDITOR</span><span class="o">=</span><span class="s1">&#39;vim -c &quot;set filetype=man&quot;&#39;</span>     <span class="p">;;</span>
+<span class="k">esac</span>
+vip fman <span class="nv">$*</span>
+<span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>And you can now enter</p>
+<div class="codehilite"><pre><span></span><code>fm tan
+</code></pre></div>
+
+<p>and be editing the man-page for tan(3f).</p>
+<h2 id="references">REFERENCES</h2>
+<ul>
+<li>
+<p>The fpm(1) home page is at <a href="https://github.com/fortran-lang/fpm">https://github.com/fortran-lang/fpm</a>.
+   It includes instructions on <strong>installing</strong> from a binary or how to bootstrap from source.</p>
+</li>
+<li>
+<p>For defining the man-page text, creating a CLI(command line inteface), allowing for regular
+   expressions and common string functions and adding ANSI in-line color control sequences
+   it uses several <code>fpm</code> dependencies:</p>
+<ul>
+<li><a href="https://github.com/urbanjost/M_CLI2.git">M_CLI2</a></li>
+<li><a href="https://github.com/urbanjost/M_match.git">M_match</a></li>
+<li><a href="https://github.com/urbanjost/M_strings.git">M_strings</a></li>
+<li><a href="https://github.com/urbanjost/M_escape.git">M_escape</a></li>
+</ul>
+</li>
+<li>These scripts are useful in particular with <code>fman</code>:<ul>
+<li>txt2man</li>
+<li>vip.sh</li>
+</ul>
+</li>
+</ul>
+<h2 id="notes">NOTES</h2>
+<p>Note I am having getting formulas to work using LaTex.</p>
+<h1 id="using-some-of-the-same-tools-here-is-a-different-view-of-the-fpm1-help-text-automatically-generated">Using some of the same tools here is a different view of the fpm(1) help text automatically generated</h1>
+<p><a href="docs/fpm_slidy.html">fpm help slides</a></p>
+<ul>
+<li><a href="docs/fpm.md">fpm</a></li>
+<li><a href="docs/new.md">new</a></li>
+<li><a href="docs/build.md">build</a></li>
+<li><a href="docs/run.md">run</a></li>
+<li><a href="docs/runner.md">runner</a></li>
+<li><a href="docs/test.md">test</a></li>
+<li><a href="docs/update.md">update</a></li>
+<li><a href="docs/install.md">install</a></li>
+<li><a href="docs/list.md">list</a></li>
+<li><a href="docs/help.md">help</a></li>
+<li><a href="docs/version.md">version</a></li>
+</ul>
+<hr>
+        </div>
+		  
+        <div class="col-md-4">
+	  <div class="well">
+          <h2>Developer Info</h2>
+          <h4>John S. Urban</h4>
+          
+          
+			   
+            <div class="text-center"><div class="btn-group" role="group">
+              
+              
+              
+              <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/fortran-intrinsic-descriptions"><i class="fa fa-github fa-lg"></i></a>
+				  
+				  
+              
+              
+              
+              
+            </div></div>
+            
+       </div>
+       </div>
+       
+      </div>
+      
+      
+      
+      
+		
+      <div class="row">
+        <div class="col-xs-6 col-sm-4">
+              <h3>Source Files</h3>
+              <ul>
+                
+                  
+                    <li><a href='./sourcefile/m_intrinsics.f90.html'>M_intrinsics.f90</a></li>
+                  
+                
+              </ul>
+          </div>
+          
+		  <div class="col-xs-6 col-sm-4">
+              <h3>Modules</h3>
+              <ul>
+                
+                  
+                    <li><a href='./module/m_intrinsics.html'>M_intrinsics</a></li>
+                  
+                
+              </ul>
+          </div>
+          
+          
+		  <div class="col-xs-6 col-sm-4">
+              <h3>Procedures</h3>
+              <ul>
+                
+                  
+                    <li><a href='./proc/help_intrinsics.html'>help_intrinsics</a></li>
+                  
+                
+              </ul>
+          </div>
+          
+          
+      </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2022-05-04 21:43  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> fortran-intrinsic-descriptions was developed by John S. Urban</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="./js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="./js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="./tipuesearch/tipuesearch_content.js"></script>
+    <script src="./tipuesearch/tipuesearch_set.js"></script>
+    <script src="./tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>
